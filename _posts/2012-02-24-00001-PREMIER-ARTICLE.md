@@ -17,11 +17,11 @@ Ce qui suit suppose que vous êtes au moins un peu familier avec jQuery et JQM. 
 
 L'application que nous allons faire va permettre à un utilisateur de noter les exercices qu'il a fait un jour donné. N'oubliez pas que c'est une application très basique dont le seul but est de faire une présentation de Backbone.js. La partie qui sera développée pour cet article implique d'extraire des données d'exercice d'un serveur et de présenter cela dans une liste, un modèle très commun pour des applications mobile. En fin de compte, notre application va ressembler à ceci :
 
-![Alt "ListView.png"](https://github.com/forresst/forresst.github.com/blob/master/images/ListView.png)
+![Alt "ListView.png"](images/ListView.png)
 
 Le JSON que nous allons traiter, ressemblera à ceci :
 
-{% highlight rhtml %}
+{% highlight json %}
 
 [
     {
@@ -103,5 +103,19 @@ exercise.initData = function(){
     exercise.activities.fetch({async: false});  // use async false to have the app wait for data before rendering the list
 };
 {% endhighlight %}
+
+La fonction exercise.initData() peut être appelé lors de l'initialisation de l'application (ou n'importe où ailleurs serait approprié) pour charger les données. Maintenant il est temps de rendre la vue. Les vues Backbone dépendent d'Underscore.js. Underscore est une bibliothèque d'utilitaire qui comprend un grand nombre de fonctionnalités intéressantes, dont l'une est les templates de vue. Backbone peut être utilisé avec de nombreux frameworks de template de vue (par exemple Mustache, Handlbars, etc...), mais ici nous nous limiterons avec les templates de Underscore car ils répondent à nos besoins. Pour nos éléments d'activité d'exercice, nous avons besoin d'un modèle très basique comme celui-ci :
+
+{% highlight rhtml %}
+
+<script type="text/template" id="activity-list-item-template">    
+    <li><a href="#activity-details" identifier="<%= id %>"><%= date %> - <%= type %></a></li>
+</script>
+
+{% endhighlight %}
+
+En donnant au template un id unique, cela permettra d'y accéder en utilisant les sélecteurs habituels de jQuery. Les éléments axés sur les données sur le modèle sont entourés par <blockquote><%= %></blockquote>  As you can see in line 2, we are using the id, date, and type attributes of whatever model is supplied to the template to fill in the HTML accordingly.  While the "identifier" attribute is not a real HTML attribute and not required by any of the frameworks, it would be used to determine what activity the user selected in the list so the appropriate data could be retrieved and displayed on a subsequent page.
+
+
 
 ##A FINIR
