@@ -2,10 +2,6 @@
 layout: default
 title: Forresst
 ---
----
-layout: default
-title: Richard Huang's Website
----
 <!-- AddThis Button BEGIN -->
 <div class="addthis_toolbox addthis_default_style ">
   <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
@@ -25,13 +21,13 @@ title: Richard Huang's Website
       <div class="clear"></div>
     </div>
     <p class="alt-font tight">
-      Posted in&nbsp;
+      Posté dans&nbsp;
       {% for category in post.categories %}
       <a href="/categories/{{ category }}" title="{{ category }}" rel="category tag">{{ category }}</a>
       {% endfor %}
     </p>
     <p class="comments-link">
-      <a href='{{post.url}}#disqus_thread'>Comments</a>
+      <a href='{{post.url}}#disqus_thread'>Commentaires</a>
     </p>
     <p class="by-line">
       <span class="date full-date">
@@ -47,7 +43,7 @@ title: Richard Huang's Website
   <span class="previous">
     {% if paginator.previous_page %}
       {% if paginator.previous_page == 1 %}
-      <a href="/blog.html" title="Previous Page">&laquo; Previous</a>
+      <a href="/blog.html" title="Previous Page">&laquo; Précédent</a>
       {% else %}
       <a href="/page{{ paginator.previous_page }}/" title="Previous Page">&laquo; Previous</a>
       {% endif %}
@@ -55,7 +51,7 @@ title: Richard Huang's Website
   </span>
   <span class="next">
     {% if paginator.next_page %}
-    <a href="/page{{ paginator.next_page }}/" title="Next Page">Next &raquo;</a>
+    <a href="/page{{ paginator.next_page }}/" title="Next Page">Suivant &raquo;</a>
     {% endif %}
   </span>
 </div>
