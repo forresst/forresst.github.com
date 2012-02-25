@@ -1,17 +1,17 @@
-    ---
-    layout: default
-    title: Qui est forresst ?
-    ---
+---
+layout: default
+title: Qui est forresst ?
+---
 
-    <div id="home">
-        <div>
-            <br>
-            <h2>Articles du Blog</h2>
-            <ul class="posts">
-                {% for post in site.posts %}
-                  <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a> <br>
-                      {{ post.info }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
+<div id="home">
+  <div>
+    <br>
+    <h2>Articles du Blog</h2>
+    <ul class="posts">
+      {% for post in site.posts %}
+        <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a> <br>
+        {{ post.info }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
