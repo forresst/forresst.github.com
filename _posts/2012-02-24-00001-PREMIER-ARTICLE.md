@@ -1,25 +1,25 @@
 ---
 layout: post
-title: Introduction à Backbone.js avec jQuery Mobile
+title: Introduction Ã  Backbone.js avec jQuery Mobile
 info : Backbone.js + jQuery Mobile
 categories:
 - jQuery Mobile
 - Backbone
 ---
 
-Si vous travaillez sur une lourde application JavaScript (Je pense à jQuery Mobile, etc ...), vous voudriez probablement trouver dans les bibliothèques JavaScript une aide pour ajouter une structure, de la cohérence et de la commodité à vos applications. Une des bibliothèques JavaScript que j'ai utilisé dernièrement est Backbone.js. Je vous cite la documentation de Backbone : "Backbone fournit des modèles qui sont des enregistrements clé-valeur avec des événements associés et customisables, des collections avec une API contenant plusiseurs fonctions, des vues avec la gestion d'événements déclaratifs, et se connecte à toute votre application existante via une interface RESTful JSON". C'est vraiment un excellent résumé de ce que Backbone peut fournir à votre application.
+Si vous travaillez sur une lourde application JavaScript (Je pense Ã  jQuery Mobile, etc ...), vous voudriez probablement trouver dans les bibliothÃ¨ques JavaScript une aide pour ajouter une structure, de la cohÃ©rence et de la commoditÃ© Ã  vos applications. Une des bibliothÃ¨ques JavaScript que j'ai utilisÃ© derniÃ¨rement est Backbone.js. Je vous cite la documentation de Backbone : "Backbone fournit des modÃ¨les qui sont des enregistrements clÃ©-valeur avec des Ã©vÃ©nements associÃ©s et customisables, des collections avec une API contenant plusiseurs fonctions, des vues avec la gestion d'Ã©vÃ©nements dÃ©claratifs, et se connecte Ã  toute votre application existante via une interface RESTful JSON". C'est vraiment un excellent rÃ©sumÃ© de ce que Backbone peut fournir Ã  votre application.
 
-Pour l'exemple, afin d'utiliser Backbone, je vais créer une petite application jQuery Mobile et utiliser un modèle Backbone, une collection et la vue pour rendre l'interface utilisateur. Grâce à l'utilisation du modèle d'événement de Backbone, l'interface utilisateur sera mise à jour quand le modèle change ou lorsque de nouveaux modèles sont créés.
+Pour l'exemple, afin d'utiliser Backbone, je vais crÃ©er une petite application jQuery Mobile et utiliser un modÃ¨le Backbone, une collection et la vue pour rendre l'interface utilisateur. GrÃ¢ce Ã  l'utilisation du modÃ¨le d'Ã©vÃ©nement de Backbone, l'interface utilisateur sera mise Ã  jour quand le modÃ¨le change ou lorsque de nouveaux modÃ¨les sont crÃ©Ã©s.
 
-J'ai décidé d'utiliser jQuery Mobile comme framework UI, principalement parce que je suis un gars mobile et il fournira le code HTML avec du style raisonnable sans effort supplémentaire de ma part. Je sais, je suis paresseux ... mais ça fonctionne pour ce blog :). En continuant sur le chemin de la paresse, lorsque je parlerais de jQuery Mobile, j'utiliserais l'abbréviation JQM à partir de maintenant.
+J'ai dÃ©cidÃ© d'utiliser jQuery Mobile comme framework UI, principalement parce que je suis un gars mobile et il fournira le code HTML avec du style raisonnable sans effort supplÃ©mentaire de ma part. Je sais, je suis paresseux ... mais Ã§a fonctionne pour ce blog :). En continuant sur le chemin de la paresse, lorsque je parlerais de jQuery Mobile, j'utiliserais l'abbrÃ©viation JQM Ã  partir de maintenant.
 
-Ce qui suit suppose que vous êtes au moins un peu familier avec jQuery et JQM.  Si ce n'est pas, jetez un oeil sur le site Web JQM [http://jquerymobile.com/](http://jquerymobile.com/) (et [http://mobile.jquery-fr.com/](http://mobile.jquery-fr.com/) pour la version française). Ils ont beaucoup de documentation et même un modèle pour créer une application de base.  Tout le code dans ce post sera disponible dans mon dépôt github ([https://github.com/stevenpsmith/Exercise/tree/BackboneIntro](https://github.com/stevenpsmith/Exercise/tree/BackboneIntro)).
+Ce qui suit suppose que vous Ãªtes au moins un peu familier avec jQuery et JQM.  Si ce n'est pas, jetez un oeil sur le site Web JQM [http://jquerymobile.com/](http://jquerymobile.com/) (et [http://mobile.jquery-fr.com/](http://mobile.jquery-fr.com/) pour la version franÃ§aise). Ils ont beaucoup de documentation et mÃªme un modÃ¨le pour crÃ©er une application de base.  Tout le code dans ce post sera disponible dans mon dÃ©pÃ´t github ([https://github.com/stevenpsmith/Exercise/tree/BackboneIntro](https://github.com/stevenpsmith/Exercise/tree/BackboneIntro)).
 
-L'application que nous allons faire va permettre à un utilisateur de noter les exercices qu'il a fait un jour donné. N'oubliez pas que c'est une application très basique dont le seul but est de faire une présentation de Backbone.js. La partie qui sera développée pour cet article implique d'extraire des données d'exercice d'un serveur et de présenter cela dans une liste, un modèle très commun pour des applications mobile. En fin de compte, notre application va ressembler à ceci :
+L'application que nous allons faire va permettre Ã  un utilisateur de noter les exercices qu'il a fait un jour donnÃ©. N'oubliez pas que c'est une application trÃ¨s basique dont le seul but est de faire une prÃ©sentation de Backbone.js. La partie qui sera dÃ©veloppÃ©e pour cet article implique d'extraire des donnÃ©es d'exercice d'un serveur et de prÃ©senter cela dans une liste, un modÃ¨le trÃ¨s commun pour des applications mobile. En fin de compte, notre application va ressembler Ã  ceci :
 
 ![Alt "ListView.png"](https://github.com/forresst/forresst.github.com/blob/master/images/ListView.png)
 
-Le JSON que nous allons traiter, ressemblera à ceci :
+Le JSON que nous allons traiter, ressemblera Ã  ceci :
 
 {% highlight rhtml %}
 
@@ -60,11 +60,11 @@ Le JSON que nous allons traiter, ressemblera à ceci :
 
 {% endhighlight %}
 
-J'aime organiser ma structure de l'application un peu différemment que JQM le montre pour sa mise en place, principalement pour des raisons organisationnelles. Mon structure de l'application ressemble à ceci :
+J'aime organiser ma structure de l'application un peu diffÃ©remment que JQM le montre pour sa mise en place, principalement pour des raisons organisationnelles. Mon structure de l'application ressemble Ã  ceci :
 
-![Alt "dir_structure.png"](https://github.com/forresst/forresst.github.com/blob/master/images/dir_structure.png)
+![Alt "dir_structure.png"](images/dir_structure.png)
 
-Tout notre travail se fera dans index.html et app.js. Dans les applications réelles, j'ai l'habitude de découper mes fichiers JS plus finement, mais cela n'est vraiment pas nécessaire ici. La page liste de l'application est définie dans index.html. Cela devrait ressembler à une définition de page JQM typique avec seulement la partie du contenu de définie. Nous utiliserons la vue de Backbone pour créer la liste :
+Tout notre travail se fera dans index.html et app.js. Dans les applications rÃ©elles, j'ai l'habitude de dÃ©couper mes fichiers JS plus finement, mais cela n'est vraiment pas nÃ©cessaire ici. La page liste de l'application est dÃ©finie dans index.html. Cela devrait ressembler Ã  une dÃ©finition de page JQM typique avec seulement la partie du contenu de dÃ©finie. Nous utiliserons la vue de Backbone pour crÃ©er la liste :
 
 {% highlight rhtml %}
 
@@ -80,7 +80,7 @@ Tout notre travail se fera dans index.html et app.js. Dans les applications réel
 
 {% endhighlight %}
 
-Si nous regardons cela dans le navigateur, on obtient une page vide avec un bouton Ajouter dans l'entête. Puisque nous voulons remplir notre liste avec des données, nous devons définir dans l'ordre un modèle Backbone et une collection pour manipuler et stocker les données via JavaScript. Un modèle de base et sa collection sont faciles à définir :
+Si nous regardons cela dans le navigateur, on obtient une page vide avec un bouton Ajouter dans l'entÃªte. Puisque nous voulons remplir notre liste avec des donnÃ©es, nous devons dÃ©finir dans l'ordre un modÃ¨le Backbone et une collection pour manipuler et stocker les donnÃ©es via JavaScript. Un modÃ¨le de base et sa collection sont faciles Ã  dÃ©finir :
 
 {% highlight rhtml %}
 
@@ -94,7 +94,7 @@ exercise.Activities = Backbone.Collection.extend({
 
 {% endhighlight %}
 
-Le grand avantage au sujet de la collection, c'est qu'elle fournit un accès RESTful à votre serveur pour la récupération et la persistance de données. Pour conserver cette simplicité, nos données seront servis à partir d'un fichier statique JSON avec la structure mentionné plus tôt. Puisque nous n'avons pas de serveur réel dans cet exemple, nous ne pouvons pas vraiment sauver nos changements n'importe où, mais dans la mémoire du client. Mais la collection ira chercher les données à partir du serveur et cela peut être utilisé pour nous aider à faire le rendu notre interface utilisateur. Le code suivant va créer une instance de la collection en mémoire, récupérer les données depuis le serveur et le parser en une collection de modèles.
+Le grand avantage au sujet de la collection, c'est qu'elle fournit un accÃ¨s RESTful Ã  votre serveur pour la rÃ©cupÃ©ration et la persistance de donnÃ©es. Pour conserver cette simplicitÃ©, nos donnÃ©es seront servis Ã  partir d'un fichier statique JSON avec la structure mentionnÃ© plus tÃ´t. Puisque nous n'avons pas de serveur rÃ©el dans cet exemple, nous ne pouvons pas vraiment sauver nos changements n'importe oÃ¹, mais dans la mÃ©moire du client. Mais la collection ira chercher les donnÃ©es Ã  partir du serveur et cela peut Ãªtre utilisÃ© pour nous aider Ã  faire le rendu notre interface utilisateur. Le code suivant va crÃ©er une instance de la collection en mÃ©moire, rÃ©cupÃ©rer les donnÃ©es depuis le serveur et le parser en une collection de modÃ¨les.
 
 {% highlight rhtml %}
 
