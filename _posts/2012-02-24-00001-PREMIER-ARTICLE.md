@@ -1,10 +1,8 @@
 ---
-
 layout: post
 title: Voici mon premier article
 info : Enfin j'ai mon blog sous github
-categories:catego1
-
+categories: catego1
 ---
 
 Voici mon premier article

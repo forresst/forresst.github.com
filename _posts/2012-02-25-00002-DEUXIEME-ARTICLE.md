@@ -1,10 +1,8 @@
 ---
-
 layout: post
 title: Voici mon deuxième article
 info : Et j'arrive même à avoir un deuxième article
-categories:cato2
-
+categories: cato2
 ---
 
 C'est beau la technologie
