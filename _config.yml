@@ -1,0 +1,4 @@
+auto : true
+url: "http://bob.github.com/"
+markdown : rdiscount
+pygments : true
