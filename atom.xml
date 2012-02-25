@@ -1,0 +1,27 @@
+---
+layout: nil
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>Forresst</title>
+ <link href="http://forresst.github.com/atom.xml" rel="self"/>
+ <link href="http://forresst.github.com/"/>
+ <updated>{{ site.time | date_to_xmlschema }}</updated>
+ <id>http://forresst.github.com/</id>
+ <author>
+   <name>Forresst</name>
+   <email>forresst17@gmail.com</email>
+ </author>
+
+ {% for post in site.posts limit:50 %}
+ <entry>
+   <title>{{ post.title }}</title>
+   <link href="http://forresst.github.com{{ post.url }}"/>
+   <updated>{{ post.date | date_to_xmlschema }}</updated>
+   <id>http://forresst.github.com{{ post.id }}</id>
+   <content type="html">{{ post.content | xml_escape }}</content>
+ </entry>
+ {% endfor %}
+
+</feed>
