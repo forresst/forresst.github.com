@@ -1,12 +1,12 @@
 ---
 
 layout: post
-title: Voici mon deuxième article
-info : Et j'arrive même à avoir un deuxième article
+title: Voici mon deuxiÃ¨me article
+info : Et j'arrive mÃªme Ã  avoir un deuxiÃ¨me article
 
 ---
 
-#Voici mon deuxième article
+#Voici mon deuxiÃ¨me article
 
 ##I'm happy
 
