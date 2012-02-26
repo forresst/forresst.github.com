@@ -21,7 +21,7 @@ L'application que nous allons faire va permettre à un utilisateur de noter les 
 
 Le JSON que nous allons traiter, ressemblera à ceci :
 
-{% highlight json %}
+{% highlight js %}
 
 [
     {
