@@ -4,7 +4,7 @@ title: Forresst
 ---
     <ul data-role="listview" data-theme="d" data-divider-theme="d">
       {% for post in site.posts %}
-      <li data-role="list-divider">{{ post.date | date_to_string }}<span class="ui-li-count">2</span></li>
+      <li data-role="list-divider">{{ post.date | date: "%d/%m/%Y" }}<span class="ui-li-count">2</span></li>
       <li><a href="{{ post.url }}"><h3>{{ post.title }}</h3><p>{{ post.info }}</p></a></li>
       {% endfor %}
     </ul>
