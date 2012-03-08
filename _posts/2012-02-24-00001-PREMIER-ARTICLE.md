@@ -62,7 +62,7 @@ Le JSON que nous allons traiter, ressemblera à ceci :
 
 J'aime organiser ma structure de l'application un peu différemment que JQM le montre pour sa mise en place, principalement pour des raisons organisationnelles. Mon structure de l'application ressemble à ceci :
 
-![Alt "dir_structure.png"](images/dir_structure.png)
+![Alt "dir_structure.png"](/images/dir_structure.png)
 
 Tout notre travail se fera dans index.html et app.js. Dans les applications réelles, j'ai l'habitude de découper mes fichiers JS plus finement, mais cela n'est vraiment pas nécessaire ici. La page liste de l'application est définie dans index.html. Cela devrait ressembler à une définition de page JQM typique avec seulement la partie du contenu de définie. Nous utiliserons la vue de Backbone pour créer la liste :
 
