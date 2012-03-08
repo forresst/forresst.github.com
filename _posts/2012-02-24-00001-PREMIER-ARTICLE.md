@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Introduction à Backbone.js avec jQuery Mobile
-info : Backbone.js + jQuery Mobile
+info : Si vous travaillez sur une lourde application JavaScript (Je pense à jQuery Mobile, etc ...), vous voudriez probablement trouver dans les bibliothèques JavaScript une aide pour ajouter une structure, de la cohérence et de la commodité à vos applications.
 categories:
 - jQuery Mobile
 - Backbone
@@ -17,7 +17,7 @@ Ce qui suit suppose que vous êtes au moins un peu familier avec jQuery et JQM. 
 
 L'application que nous allons faire va permettre à un utilisateur de noter les exercices qu'il a fait un jour donné. N'oubliez pas que c'est une application très basique dont le seul but est de faire une présentation de Backbone.js. La partie qui sera développée pour cet article implique d'extraire des données d'exercice d'un serveur et de présenter cela dans une liste, un modèle très commun pour des applications mobile. En fin de compte, notre application va ressembler à ceci :
 
-![Alt "ListView.png"](images/ListView.png)
+![Alt "ListView.png"](/images/ListView.png)
 
 Le JSON que nous allons traiter, ressemblera à ceci :
 
