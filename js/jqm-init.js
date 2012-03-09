@@ -1,12 +1,9 @@
 $(document).bind("mobileinit", function() {
 
 
-	$("div").live("pagebeforeshow",function(event,ui) {
-		var header = $("div[data-role='header'] h1",$(this));
-		var title = $.trim(header.text());
-		modtitle = "/" + title + ".html";
-		_gaq.push(["_trackPageview",modtitle]);
-		console.log(modtitle);
+	$( '[data-role=page]' ).live( 'pageshow', function (event, ui) {
+		_gaq.push(['_trackPageview']);
+		console.log('toto');
 	});
 	
 
