@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Faire du vélo
+title: Faire du vÃ©lo
 info : Un jour je gagnerais le tour de France
 categories:
 - Sport
