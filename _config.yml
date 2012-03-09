@@ -1,5 +1,5 @@
 paginate: 3
-auto : true
 url: "http://forresst.github.com/"
 markdown : rdiscount
 pygments : true
+permalink: /:year/:month/:day/:title/
