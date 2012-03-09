@@ -10,8 +10,16 @@
   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script src="/js/jqm-init.js"></script>  
   <script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+<!-- Google Analytics -->
+<script type="text/javascript">
+var _gaq=[['_setAccount','UA-28940436-2'],['_trackPageview']];(function(d,t){
+var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+g.async=1;g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)
+}(document,'script'));
+</script>
+<!-- Google Analytics end -->
+  </script>  
 </head>
 <body> 
 <div data-role="page">
@@ -50,17 +58,17 @@
 
 <!-- Google Analytics -->
 <script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-28940436-2']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
+$( '[data-role=page]' ).live( 'pageshow', function (event, ui) {
+  try 
+    {
+    if ( location.hash ) { url = location.hash; } else { url = defaulturl; }
+    _gaq.push( ['_trackPageview', url] );
+    } 
+  catch( error ) 
+    {
+    // Oh no! Call the catch logger
+    }
+});
 </script>
 <!-- Google Analytics end -->
 
