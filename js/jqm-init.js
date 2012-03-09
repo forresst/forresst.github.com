@@ -7,8 +7,6 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
-$( document ).bind( "mobileinit", function() {
-
   // Google analytics
   $( '[data-role=page]' ).live( 'pageshow', function (event, ui) {
         try 
@@ -30,5 +28,4 @@ $( document ).bind( "mobileinit", function() {
       }
   });
 
-});
 
