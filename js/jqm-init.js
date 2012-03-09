@@ -2,7 +2,11 @@ $( document ).bind( "mobileinit", function() {
 
   // Google analytics
   $( '[data-role=page]' ).live( 'pageshow', function (event, ui) {
-        try 
+
+      var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28940436-2']);
+  
+   try 
         {
             if ( location.hash )
             {
@@ -19,9 +23,6 @@ $( document ).bind( "mobileinit", function() {
 	  // Oh no! Call the catch logger
  
       }
-  
-    var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-28940436-2']);
 
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
