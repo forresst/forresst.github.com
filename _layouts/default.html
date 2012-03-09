@@ -18,11 +18,9 @@
     <h1>Le blog de Forresst</h1>
     <div data-role="navbar" data-iconpos="left">
       <ul>
-<!--        <li><a href="#" data-icon="arrow-l">Prec.</a></li> -->
         <li><a href="/" data-icon="home">Blog</a></li>
         <li><a href="/about.html" data-icon="info">Moi</a></li>
         <li><a href="/projet.html" data-icon="grid">Projets</a></li>
-<!--        <li><a href="#" data-icon="arrow-r">Suiv.</a></li> -->
       </ul>
     </div><!-- /navbar -->
   </div><!-- /header -->
@@ -31,11 +29,20 @@
     {{ content }}
   </div><!-- /content -->
   
-  <div data-role="footer">
-    <h4>Proudly powered by
-          <a href="https://github.com/mojombo/jekyll">Jekyll</a>
-          and
-          <a href="http://jquerymobile.com" >Jquery Mobile</a></h4>
+  <div data-role="footer" class="ui-bar">
+  <div data-role="controlgroup" data-type="horizontal">
+  {% if paginator.previous_page %}
+    {% if paginator.previous_page == 1 %}
+      <a href="/" data-role="button" data-icon="arrow-l">Prec.</a>
+    {% else %}
+      <a href="/page{{ paginator.previous_page }}/" data-role="button" data-icon="arrow-l">Prec.</a>
+    {% endif %}
+  {% endif %}
+  <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>
+  {% if paginator.next_page %}
+    <a href="/page{{ paginator.next_page }}/" data-role="button" data-icon="arrow-r">Suiv.</a>
+  {% endif %}
+  </div>
   </div><!-- /footer -->
   
 </div><!-- /page -->
