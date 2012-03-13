@@ -6,9 +6,9 @@ layout: default
   {{ content }}
 </div>
 
-<div id="related">
-  <h2>Articles récents</h2>
-  <ul data-role="listview" data-inset="true">
+<div>
+  <ul data-role="listview" data-inset="true" data-theme="d">
+  <li data-role="list-divider">Articles récents</li>
   {% for post in site.related_posts limit:3 %}
     <li><a href="{{ post.url }}">{{ post.date | date: "%d/%m/%Y" }} - {{ post.title }}</a></li>
   {% endfor %}
