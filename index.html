@@ -1,10 +1,20 @@
 ---
 layout: default
-title: Forresst
+title: Blog
 ---
-    <ul data-role="listview" data-theme="d" data-divider-theme="d">
-      {% for post in paginator.posts %}
-      <li data-role="list-divider">{{ post.date | date: "%d/%m/%Y" }}<span class="ui-li-count">2</span></li>
+{% for post in paginator.posts %}
+  {% capture this_date %}{{ post.date | date: "%d/%m/%Y" }}{% endcapture %}
+  {% capture next_date %}{{ post.previous.date | date: "%d/%m/%Y" }}{% endcapture %}
+  {% if forloop.first %}
+<ul data-role="listview" data-theme="d" data-divider-theme="d">
+      <li data-role="list-divider">{{ this_date }}<span class="ui-li-count">2</span></li>
+  {% endif %}
       <li><a href="{{ post.url }}"><h3>{{ post.title }}</h3><p>{{ post.info }}</p></a></li>
-      {% endfor %}
+  {% if forloop.last %}
     </ul>
+  {% else %}
+    {% if this_date != next_date %}
+      <li data-role="list-divider">{{ next_date }}<span class="ui-li-count">2</span></li>
+    {% endif %}
+  {% endif %}
+{% endfor %}
