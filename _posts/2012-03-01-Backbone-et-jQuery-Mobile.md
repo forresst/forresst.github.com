@@ -19,7 +19,7 @@ Ce qui suit suppose que vous êtes au moins un peu familier avec jQuery et JQM. 
 
 L'application que nous allons faire va permettre à un utilisateur de noter les exercices qu'il a fait un jour donné. N'oubliez pas que c'est une application très basique dont le seul but est de faire une présentation de Backbone.js. La partie qui sera développée pour cet article implique d'extraire des données d'exercice d'un serveur et de présenter cela dans une liste, un modèle très commun pour des applications mobile. En fin de compte, notre application va ressembler à ceci :
 
-![Alt "ListView.png"](/images/ListView.png)
+![Alt "ListView.png"](/images/2012-03-01-Backbone-et-jQuery-Mobile/ListView.png)
 
 Le JSON que nous allons traiter, ressemblera à ceci :
 
@@ -64,7 +64,7 @@ Le JSON que nous allons traiter, ressemblera à ceci :
 
 J'aime organiser ma structure de l'application un peu différemment que JQM le montre pour sa mise en place, principalement pour des raisons organisationnelles. Mon structure de l'application ressemble à ceci :
 
-![Alt "dir_structure.png"](/images/dir_structure.png)
+![Alt "dir_structure.png"](/images/2012-03-01-Backbone-et-jQuery-Mobile/dir_structure.png)
 
 Tout notre travail se fera dans index.html et app.js. Dans les applications réelles, j'ai l'habitude de découper mes fichiers JS plus finement, mais cela n'est vraiment pas nécessaire ici. La page liste de l'application est définie dans index.html. Cela devrait ressembler à une définition de page JQM typique avec seulement la partie du contenu de définie. Nous utiliserons la vue de Backbone pour créer la liste :
 
