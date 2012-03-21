@@ -7,14 +7,30 @@ title: Blog
   {% capture next_date %}{{ post.previous.date | date: "%d/%m/%Y" }}{% endcapture %}
   {% if forloop.first %}
 <ul data-role="listview" data-theme="d" data-divider-theme="d">
-      <li data-role="list-divider">{{ this_date }}<span class="ui-li-count">2</span></li>
+      <li data-role="list-divider">{{ this_date }}
+      {% assign nbpost = "0" %}
+      {% for postdate in site.posts %}
+        {% capture this_postdate %}{{ postdate.date | date: "%d/%m/%Y" }}{% endcapture %}
+        {% if this_postdate == this_date %}
+          {% capture nbpost %}{{ nbpost | plus:1 }}{% endcapture %}
+        {% endif %}
+      {% endfor %}<span class="ui-li-count">{{ nbpost }}</span></li>
   {% endif %}
       <li><a href="{{ post.url }}"><h3>{{ post.title }}</h3><p>{{ post.info }}</p></a></li>
   {% if forloop.last %}
     </ul>
   {% else %}
     {% if this_date != next_date %}
-      <li data-role="list-divider">{{ next_date }}<span class="ui-li-count">2</span></li>
+      <li data-role="list-divider">{{ next_date }}
+      {% assign nbpost = "0" %}
+      {% for postdate in site.posts %}
+        {% capture this_postdate %}{{ postdate.date | date: "%d/%m/%Y" }}{% endcapture %}
+        {% if this_postdate == next_date %}
+          {% capture nbpost %}{{ nbpost | plus:1 }}{% endcapture %}
+        {% endif %}
+      {% endfor %}
+       <span class="ui-li-count">{{ nbpost }}</span>
+      </li>
     {% endif %}
   {% endif %}
 {% endfor %}
