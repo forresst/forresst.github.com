@@ -5,6 +5,7 @@ info: Comment installer Jekyll sous Windows ?
 categories:
 - Jekyll
 - Tutoriel
+lastmod: 2012-03-20 18:00:00 +0100
 ---
 
 Jekyll est un moteur d'analyse pour construire des sites Web statiques à partir de composants dynamiques tels que les templates,
