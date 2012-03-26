@@ -3,27 +3,16 @@ layout: default
 title: Archives
 ---
 <div data-role="collapsible" data-collapsed="false" data-theme="a" data-content-theme="a" data-inset="true">
-  <h3>Archives</h3>
-{% for post in site.posts %}
-  {% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
-  {% capture this_month %}{{ post.date | date: "%B" }}{% endcapture %}
-  {% capture next_year %}{{ post.previous.date | date: "%Y" }}{% endcapture %}
-  {% capture next_month %}{{ post.previous.date | date: "%B" }}{% endcapture %}
-
-  {% if forloop.first %}
+  <h3>Archives</h3>{% for post in site.posts %}{% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}{% capture this_month %}{{ post.date | date: "%B" }}{% endcapture %}{% capture next_year %}{{ post.previous.date | date: "%Y" }}{% endcapture %}{% capture next_month %}{{ post.previous.date | date: "%B" }}{% endcapture %}{% if forloop.first %}
   <div data-role="collapsible" data-collapsed="false" data-theme="e" data-content-theme="e" data-inset="true">
     <h3>{{this_year}}</h3>
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="b" data-inset="true">
       <h3>{{this_month}} {{this_year}}</h3>
-      <ul data-role="listview" data-theme="c">
-  {% endif %}
-        <li><a href="{{ post.url }}">{{ post.date | date: "%d/%m/%Y" }} - {{ post.title }}</a></li>
-  {% if forloop.last %}
+      <ul data-role="listview" data-theme="c">{% endif %}
+        <li><a href="{{ post.url }}">{{ post.date | date: "%d/%m/%Y" }} - {{ post.title }}</a></li>{% if forloop.last %}
       </ul>
     </div>
-  </div>
-  {% else %}
-    {% if this_year != next_year %}
+  </div>{% else %}{% if this_year != next_year %}
       </ul>
     </div>
   </div>
@@ -31,16 +20,10 @@ title: Archives
     <h3>{{next_year}}</h3>
     <div data-role="collapsible" data-theme="b" data-content-theme="b" data-inset="true">
       <h3>{{next_month}} {{next_year}}</h3>
-      <ul data-role="listview" data-theme="c">
-    {% else %}    
-      {% if this_month != next_month %}
+      <ul data-role="listview" data-theme="c">{% else %}{% if this_month != next_month %}
       </ul>
     </div>
     <div data-role="collapsible" data-theme="b" data-content-theme="b" data-inset="true">
       <h3>{{next_month}} {{next_year}}</h3>
-      <ul data-role="listview" data-theme="c">
-      {% endif %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
+      <ul data-role="listview" data-theme="c">{% endif %}{% endif %}{% endif %}{% endfor %}
 </div>

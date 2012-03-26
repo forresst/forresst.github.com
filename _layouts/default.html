@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Forresst - {{ page.title }}</title>
   <meta name="author" content="forresst" />
   <!-- syntax highlighting CSS -->
@@ -28,43 +28,19 @@
     <a href="/menu.html" data-rel="dialog" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="notext" data-iconshadow="false">Menu</a>
   </div><!-- /header -->
 
-  <div data-role="content">  
-    {{ content }}
+  <div data-role="content">{{ content }}
   </div><!-- /content -->
-  
+
   <div data-role="footer" class="ui-bar">
-  <div data-role="controlgroup" data-type="horizontal">
-  {% if paginator.previous_page %}
-    {% if paginator.previous_page == 1 %}
-      <a href="/" data-role="button" data-icon="arrow-l">Prec.</a>
-    {% else %}
-      <a href="/page{{ paginator.previous_page }}/" data-role="button" data-icon="arrow-l">Prec.</a>
-    {% endif %}
-  {% endif %}
-  <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>
-  {% if paginator.next_page %}
-    <a href="/page{{ paginator.next_page }}/" data-role="button" data-icon="arrow-r">Suiv.</a>
-  {% endif %}
-  </div>
+    <div data-role="controlgroup" data-type="horizontal">{% if paginator.previous_page %}{% if paginator.previous_page == 1 %}
+      <a href="/" data-role="button" data-icon="arrow-l">Prec.</a>{% else %}
+      <a href="/page{{ paginator.previous_page }}/" data-role="button" data-icon="arrow-l">Prec.</a>{% endif %}{% endif %}
+      <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>{% if paginator.next_page %}
+      <a href="/page{{ paginator.next_page }}/" data-role="button" data-icon="arrow-r">Suiv.</a>{% endif %}
+    </div>
   </div><!-- /footer -->
-  
+
 </div><!-- /page -->
-
-<!-- Google Analytics -->
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-28940436-2']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-<!-- Google Analytics end -->
 
 </body>
 </html>

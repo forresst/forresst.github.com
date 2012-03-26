@@ -1,0 +1,10 @@
+---
+layout: default
+title: Catégories
+---
+    <ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Recherche ..." data-theme="d">{% for category in site.categories %}
+      <li><h3>{{ category[0] }}</h3><span class="ui-li-count">{{ category[1].size }}</span>
+      <ul>{% for node in category[1] %}
+        <li><a href="{{node.url}}">{{node.title}}</a></li>{% endfor %}
+      </ul></li>{% endfor %}
+    </ul>
