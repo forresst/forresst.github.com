@@ -33,10 +33,10 @@
 
   <div data-role="footer" class="ui-bar">
     <div data-role="controlgroup" data-type="horizontal">{% if paginator.previous_page %}{% if paginator.previous_page == 1 %}
-      <a href="/" data-role="button" data-icon="arrow-l">Prec.</a>{% else %}
-      <a href="/page{{ paginator.previous_page }}/" data-role="button" data-icon="arrow-l">Prec.</a>{% endif %}{% endif %}
+      <a href="/" data-role="button" data-icon="arrow-l">Suiv.</a>{% else %}
+      <a href="/page{{ paginator.previous_page }}/" data-role="button" data-icon="arrow-l">Suiv.</a>{% endif %}{% endif %}
       <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>{% if paginator.next_page %}
-      <a href="/page{{ paginator.next_page }}/" data-role="button" data-icon="arrow-r">Suiv.</a>{% endif %}
+      <a href="/page{{ paginator.next_page }}/" data-role="button" data-icon="arrow-r">Prec.</a>{% endif %}
     </div>
   </div><!-- /footer -->
 
