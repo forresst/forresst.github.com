@@ -5,7 +5,6 @@ info: Comment installer Jekyll sous Windows ?
 categories:
 - Jekyll
 - Tutoriel
-lastmod: 2012-03-20 18:00:00 +0100
 ---
 
 Jekyll est un moteur d'analyse pour construire des sites Web statiques à partir de composants dynamiques tels que les templates,
@@ -19,7 +18,7 @@ Jekyll est développé sous Ruby et la manière la plus simple pour l'installer 
 Rubygems est un utilitaire qui gère l'installation ou la désinstallation d'applications ou de librairies contenus dans des paquets appelés gemme.
 Rubygems permet l'installation locale, à partir d'un fichier .gem ou distant depuis le site http://rubyforge.org
 
-###I) Prérequis
+###I) Pré-requis
 
 Pour installer Jekyll, il faut installer Ruby et RubyGems.
 
