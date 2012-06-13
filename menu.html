@@ -11,6 +11,16 @@
   <script src="/js/jqm-init.js"></script>
   <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
   </script>  
+  <script src="./js/jquery-ui-1.8.21.custom.min.js"></script>
+  <script>
+  $(function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+    $( "#sortable" ).bind( "sortstop", function(event, ui) {
+      $('#sortable').listview('refresh');
+    });
+  });
+  </script>
 </head>
 <body> 
 <div data-role="dialog">
