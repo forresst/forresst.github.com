@@ -230,10 +230,11 @@ Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
 {% endhighlight %}
 
 Ces erreurs peuvent avoir un impact sur l'affichage du blog. Et même dans certains cas, cela peut empêcher le bon fonctionnement de Jekyll. Il existe une parade à ce problème.
-Il suffit simplement de lancer la commande suivante avant de lancer le serveur Jekyll :
+Il suffit simplement de lancer les commandes suivantes avant de lancer le serveur Jekyll :
 
 {% highlight text %}
-chcp 65001
+set LC_ALL=en_US.UTF-8
+set LANG=en_US.UTF-8
 {% endhighlight %}
 
 Cette commande permet de dire à Windows que l'encodage a utilisé est l'UTF-8. Si vous relancez Jekyll après cette manipulation, ces errurs auront disparus.
