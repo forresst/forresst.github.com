@@ -19,7 +19,7 @@ I also made several positive reports on desktop browsers:
 
 Here is the link to the <a href="/demos/sortable/en/index.html" rel="external" data-role="button" data-inline="true" data-mini="true">Demo</a> .
 
-###I) Create a list with jQuery Mobile
+###1 - Create a list with jQuery Mobile
 
 First we will create a page containing a list jQuery Mobile:
 
@@ -34,7 +34,6 @@ First we will create a page containing a list jQuery Mobile:
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
-  <script>
 </head>
 <body> 
 <div>
@@ -59,7 +58,7 @@ First we will create a page containing a list jQuery Mobile:
 
 **Note**: I added *id="sortable"* on tag *ul*, it will serve us for the next point.
 
-###II) Add the features of jQuery UI sortable
+###2 - Add the features of jQuery UI sortable
 
 I was inspired by the <a href="http://jqueryui.com/demos/sortable/" rel="external" data-role="button" data-inline="true" data-mini="true">Demo</a> site of jQuery UI.
 
@@ -72,6 +71,7 @@ I was inspired by the <a href="http://jqueryui.com/demos/sortable/" rel="externa
   
   <!-- (Start) Add the features of jQuery UI sortable -->
   <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+  <script>
   $(document).bind('pageinit', function() {
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
@@ -80,6 +80,7 @@ I was inspired by the <a href="http://jqueryui.com/demos/sortable/" rel="externa
       $('#sortable').listview('refresh');
     });
   });
+  </script>
   <!-- (End) Add the features of jQuery UI sortable -->
   
 </head>
@@ -94,5 +95,32 @@ I was inspired by the <a href="http://jqueryui.com/demos/sortable/" rel="externa
 * Mouse
 * Sortable
 
-###III) Add jQuery UI Touch Punch to work on touch devices
+###3 - Add jQuery UI Touch Punch to work on touch devices
 
+The sortable list works fine on a desktop browser. But if you want to do a test on your smartphone, it does not work.
+There is a small plugin for jQuery UI to simulate touch events for drag & drop function on smartphones.
+This tool is <a href="http://touchpunch.furf.com/" rel="external" data-role="button" data-inline="true" data-mini="true">jQuery UI Touch Punch</a>.
+
+Please download the <a href="https://raw.github.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js" rel="external" data-role="button" data-inline="true" data-mini="true">JS minified</a> and save it in the same directory as your HTML file. Then add the JS in your HTML page.
+
+{% highlight html %}
+...
+  <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+
+  <!-- (Start) Add jQuery UI Touch Punch -->
+  <script src="jquery.ui.touch-punch.min.js"></script>
+  <!-- (End) Add jQuery UI Touch Punch -->
+
+  <script>  
+  $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable();
+...
+{% endhighlight %}
+
+The sortable list now works properly on your smartphone.
+
+###4 - Conclusion
+
+I hope it will serve you in your future developments. One must be aware that this is a trick and that this is not the best solution that exists.
+The JS file from jQuery UI is pretty heavy, you can still reduce it by taking only the components listed above.
+But I think, it's the simplest pending another solution ...

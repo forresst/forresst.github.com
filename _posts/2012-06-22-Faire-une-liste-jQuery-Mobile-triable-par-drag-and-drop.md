@@ -19,7 +19,7 @@ J'ai fait aussi des tests concluants sur plusieurs navigateurs de bureau :
 
 Voici le lien de la <a href="/demos/sortable/fr/index.html" rel="external" data-role="button" data-inline="true" data-mini="true">Démo</a>.
 
-###I) Créez une liste sous jQuery Mobile
+###1 - Créez une liste sous jQuery Mobile
 
 Tout d'abord nous allons créer une page jQuery Mobile contenant une liste :
 
@@ -34,7 +34,6 @@ Tout d'abord nous allons créer une page jQuery Mobile contenant une liste :
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
-  <script>
 </head>
 <body> 
 <div>
@@ -59,7 +58,7 @@ Tout d'abord nous allons créer une page jQuery Mobile contenant une liste :
 
 **Remarque** : j'ai rajouté *id="sortable"* sur la balise *ul*, cela va nous servir pour le point suivant.
 
-###II) Ajoutez les fonctionnalités sortable de jQuery UI
+###2 - Ajoutez les fonctionnalités sortable de jQuery UI
 
 Je me suis inspiré de la <a href="http://jqueryui.com/demos/sortable/" rel="external" data-role="button" data-inline="true" data-mini="true">Démo</a> du site de jQuery UI
 
@@ -72,14 +71,17 @@ Je me suis inspiré de la <a href="http://jqueryui.com/demos/sortable/" rel="ext
   
   <!-- (Début) Ajoutez les fonctionnalités sortable de jQuery UI -->
   <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+  <script>
   $(document).bind('pageinit', function() {
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
-    <!-- Actualiser la liste à la fin de sorte à avoir un affichage correct -->
+    <!-- Refresh list to the end of sort to have a correct display -->
     $( "#sortable" ).bind( "sortstop", function(event, ui) {
       $('#sortable').listview('refresh');
     });
   });
+  </script>
   <!-- (Fin) Ajoutez les fonctionnalités sortable de jQuery UI -->
   
 </head>
@@ -94,5 +96,33 @@ Je me suis inspiré de la <a href="http://jqueryui.com/demos/sortable/" rel="ext
 * Mouse
 * Sortable
 
-###III) Ajouter jQuery UI Touch Punch pour que cela fonctionne sur les appareils tactiles
+###3 - Ajoutez jQuery UI Touch Punch pour que cela fonctionne sur les appareils tactiles
+
+La liste triable fonctionne correctement sur un navigateur de bureau. Mais si vous voulez faire un test sur votre smartphone, cela ne fonctionne pas.
+Il existe un petit plugin à jQuery UI qui permet de simuler les événements tactiles pour que le drag & drop fonctionnent sur les smartphones.
+Cet outil c'est <a href="http://touchpunch.furf.com/" rel="external" data-role="button" data-inline="true" data-mini="true">jQuery UI Touch Punch</a>.
+
+Veuillez télécharger le <a href="https://raw.github.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js" rel="external" data-role="button" data-inline="true" data-mini="true">JS minifié</a> et le sauvegarder dans le même répertoire que votre fichier HTML. Puis ajoutez le JS dans votre page HTML.
+
+{% highlight html %}
+...
+  <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+
+  <!-- (Début) Ajoutez jQuery UI Touch Punch -->
+  <script src="jquery.ui.touch-punch.min.js"></script>
+  <!-- (Fin) Ajoutez jQuery UI Touch Punch -->
+
+  <script>
+  $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable();
+...
+{% endhighlight %}
+
+La liste triable fonctionne maintenant correctement sur votre smartphone.
+
+###4 - Conclusion
+
+J'espère que cela pourra vous servir dans vos futurs développements. Il faut bien être conscient que c'est une astuce et que ce n'est pas la meilleure solution qui existe.
+Le fichier JS de jQuery UI est assez lourd, vous pouvez tout de même le diminuer en prenant seulement les composants cités au dessus.
+Mais je pense que c'est la mise oeuvre la plus simple en attendant une autre solution ...
 
