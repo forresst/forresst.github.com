@@ -11,6 +11,12 @@ J'ai eu besoin d'une liste "triable" par drag & drop sous jQuery Mobile qui fonc
 Ne voulant par réinventer la roue, j'ai piocher le code dans différentes librairies pour arriver à un résultat qui fonctionne sous Android 4 sur mon Nexus S avec le navigateur d'Android.
 Vos retours sur d'autres smartphones, sur d'autres navigateurs m'interesse. Un petit retour sur mon compte twitter (@forresst17) sera apprécié. Je signalerais vos retours sur cet article.
 
+Testé et approuvé sur :
+
+* Nexus S avec Android 4.0 (mon smartphone)
+
+* iPad2 avec IOS 5.1 (Merci Poulpator)
+
 J'ai fait aussi des tests concluants sur plusieurs navigateurs de bureau :
 
 * Chrome 12

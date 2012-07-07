@@ -11,6 +11,13 @@ I needed a sortable list by drag & drop in jQuery Mobile running on my smartphon
 I did not want to reinvent the wheel, so I pick the code for public libraries to achieve a result that runs on Android 4 on my Nexus S with the Android browser.
 Your feedback on other smartphones, on other browsers am interested. A small return on my twitter account (@ forresst17) will be appreciated. I would point your feedback on this post.
 
+Tested and approved on:
+
+* Nexus S with Android 4.0 (my smartphone)
+
+* iPad2 with IOS 5.1 (Thanks Poulpator)
+
+
 I also made several positive reports on desktop browsers:
 
 * Chrome 12
