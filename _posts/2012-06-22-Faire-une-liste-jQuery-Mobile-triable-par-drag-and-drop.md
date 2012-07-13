@@ -37,9 +37,9 @@ Tout d'abord nous allons créer une page jQuery Mobile contenant une liste :
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <title>Exemple</title> 
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
 </head>
 <body> 
 <div>
@@ -71,9 +71,9 @@ Je me suis inspiré de la <a href="http://jqueryui.com/demos/sortable/" rel="ext
 {% highlight html %}
 ...
   <title>Exemple</title> 
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
   
   <!-- (Début) Ajoutez les fonctionnalités sortable de jQuery UI -->
   <script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
