@@ -17,6 +17,8 @@ Testé et approuvé sur :
 
 * iPad2 avec IOS 5.1 (Merci Poulpator)
 
+* Toshiba AT200 avec Android 4.0.3 (Merci zboub_2000)
+
 J'ai fait aussi des tests concluants sur plusieurs navigateurs de bureau :
 
 * Chrome 12

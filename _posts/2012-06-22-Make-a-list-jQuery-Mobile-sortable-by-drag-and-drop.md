@@ -17,6 +17,8 @@ Tested and approved on:
 
 * iPad2 with IOS 5.1 (Thanks Poulpator)
 
+* Toshiba AT200 with Android 4.0.3 (Thanks zboub_2000)
+
 
 I also made several positive reports on desktop browsers:
 
