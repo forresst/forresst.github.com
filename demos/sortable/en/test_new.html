@@ -6,19 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <title>Example sortable list</title> 
   <meta name="author" content="forresst" />
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
-  <script src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
-  <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
-  <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.min.js"></script>
-  <script src="jquery.ui.touch-punch.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
+  <script src="test.js"></script>
   <script>
+  var _gaq = _gaq || [];
+  $(document).ready(function(e) {
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + 
+                  '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    }); 
+
+  $('[data-role=page]').live('pageshow', function (event, ui) {
+    try {
+      _gaq.push(['_setAccount', 'UA-28940436-2']);
+      console.log($.mobile.activePage.attr("data-url"));
+      if ($.mobile.activePage.attr("data-url")) {
+        _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
+      } else {
+        _gaq.push(['_trackPageview']);
+      }
+    } catch(err) {}
+  });
+  
   $(document).bind('pageinit', function() {
-//  $(function () {
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
     $( "#sortable" ).bind( "sortstop", function(event, ui) {
       $('#sortable').listview('refresh');
-    }); 
+    });
   });
   </script>  
 </head>
@@ -63,26 +84,17 @@
       <li>Item 28</li>
       <li>Item 29</li>
       <li>Item 30</li>
-      <li>Item 41</li>
-      <li>Item 42</li>
-      <li>Item 43</li>
-      <li>Item 44</li>
-      <li>Item 45</li>
-      <li>Item 46</li>
-      <li>Item 47</li>
-      <li>Item 48</li>
-      <li>Item 49</li>
-      <li>Item 50</li>
-      <li>Item 51</li>
-      <li>Item 52</li>
-      <li>Item 53</li>
-      <li>Item 54</li>
-      <li>Item 55</li>
-      <li>Item 56</li>
-      <li>Item 57</li>
-      <li>Item 58</li>
-      <li>Item 59</li>
-      <li>Item 60</li>
+      <li>Item 31</li>
+      <li>Item 32</li>
+      <li>Item 33</li>
+      <li>Item 34</li>
+      <li>Item 35</li>
+      <li>Item 36</li>
+      <li>Item 37</li>
+      <li>Item 38</li>
+      <li>Item 39</li>
+      <li>Item 40</li>
+
     </ul>
   </div>
 </div>
