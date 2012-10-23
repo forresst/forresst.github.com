@@ -7,38 +7,25 @@
   <title>Example sortable list</title> 
   <meta name="author" content="forresst" />
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+  <script src="jquery.ui.touch-punch.min.js"></script>   
+  <!-- (Start) Add the features of jQuery UI sortable -->
   <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
-  <script src="test.js"></script>
-  <script>
-  var _gaq = _gaq || [];
-  $(document).ready(function(e) {
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + 
-                  '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-    }); 
 
-  $('[data-role=page]').live('pageshow', function (event, ui) {
-    try {
-      _gaq.push(['_setAccount', 'UA-28940436-2']);
-      console.log($.mobile.activePage.attr("data-url"));
-      if ($.mobile.activePage.attr("data-url")) {
-        _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
-      } else {
-        _gaq.push(['_trackPageview']);
-      }
-    } catch(err) {}
-  });
-  
+  <script>
   $(document).bind('pageinit', function() {
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
     $( "#sortable" ).bind( "sortstop", function(event, ui) {
       $('#sortable').listview('refresh');
+    });
+
+    $( "#sortable" ).on( "mousedown", function() {
+      $('.ui-content').css('overflowX', 'visible');
+    });
+    $( "#sortable" ).on( "mouseup", function() {
+      $('.ui-content').css('overflowX', 'hidden');
     });
   });
   </script>  
@@ -94,7 +81,37 @@
       <li>Item 38</li>
       <li>Item 39</li>
       <li>Item 40</li>
-
+      <li>Item 50</li>
+      <li>Item 51</li>
+      <li>Item 52</li>
+      <li>Item 53</li>
+      <li>Item 54</li>
+      <li>Item 55</li>
+      <li>Item 56</li>
+      <li>Item 57</li>
+      <li>Item 58</li>
+      <li>Item 59</li>
+      <li>Item 60</li>
+      <li>Item 61</li>
+      <li>Item 62</li>
+      <li>Item 63</li>
+      <li>Item 64</li>
+      <li>Item 65</li>
+      <li>Item 66</li>
+      <li>Item 67</li>
+      <li>Item 68</li>
+      <li>Item 69</li>
+      <li>Item 70</li>
+      <li>Item 71</li>
+      <li>Item 72</li>
+      <li>Item 73</li>
+      <li>Item 74</li>
+      <li>Item 75</li>
+      <li>Item 76</li>
+      <li>Item 77</li>
+      <li>Item 78</li>
+      <li>Item 79</li>
+      <li>Item 80</li>
     </ul>
   </div>
 </div>
