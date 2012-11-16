@@ -10,17 +10,21 @@
   <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
   <!-- (Start) Add the features of jQuery UI sortable -->
-  <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
+  <!-- <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script> -->
+  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+
   <script src="jquery.ui.touch-punch.min.js"></script>   
 
   <script>
   $(document).on('pageinit', function() {
-    $( "#sortable" ).sortable();
+    $( "#sortable" ).sortable({
+            items: "li:not(.ui-state-disabled)"
+        });
     $( "#sortable" ).disableSelection();
-//    $( "#sortable" ).on( "sortstop", function(event, ui) {
-//      $('#sortable').listview('refresh');
-//    });
-    $( "#sortable" ).on( "mousedown", function() {
+    $( "#sortable" ).on( "sortstop", function(event, ui) {
+      $('#sortable').listview('refresh');
+    });
+    $( "#sortable" ).on( "taphold", function() {
       $('.ui-content').css('overflowX', 'visible');
       $('.ui-mobile-viewport').css('overflowX', 'visible');
     });
@@ -41,7 +45,7 @@
   
   <h2>Demo</h2>
     <ul data-role="listview" data-inset="true" data-theme="d" id="sortable">
-      <li data-role="list-divider">List</li>
+      <li data-role="list-divider" class="ui-state-disabled" >List</li>
       <li>Item 1</li>
       <li>Item 2</li>
       <li>Item 3</li>
