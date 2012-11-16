@@ -18,20 +18,31 @@
   <script>
   $(document).on('pageinit', function() {
     $( "#sortable" ).sortable({
-            items: "li:not(.ui-state-disabled)"
+            items: "li:not(.ui-state-disabled)",
+            opacity: 0.5
         });
     $( "#sortable" ).disableSelection();
+    $( "#sortable" ).sortable('disable');
     $( "#sortable" ).on( "sortstop", function(event, ui) {
       $('#sortable').listview('refresh');
     });
     $( "#sortable" ).on( "taphold", function() {
+      var uiSortableHelper = $( "#sortable" ).find( 'li.ui-sortable-helper' ).length;
+	  console.log(uiSortableHelper);
+      if ( uiSortableHelper == 1 ) { return; }
+      var sortdisabled = $( "#sortable" ).sortable( "option", "disabled" );
+      if ( sortdisabled ) { 
+        $( "#sortable" ).sortable('enable');
+        $( "#popupEnabled" ).popup( "open", { transition: "pop" } );
+        setTimeout( function(){ $( "#popupEnabled" ).popup( "close" ) }, 1000 );
+      } else { 
+        $( "#sortable" ).sortable('disable');
+        $( "#popupDisabled" ).popup( "open", { transition: "pop" } );
+        setTimeout( function(){ $( "#popupDisabled" ).popup( "close" ) }, 1000 );
+      }
       $('.ui-content').css('overflowX', 'visible');
       $('.ui-mobile-viewport').css('overflowX', 'visible');
     });
-    $( "#sortable" ).on( "mouseup", function() {
-      $('.ui-content').css('overflowX', 'hidden');
-      $('.ui-mobile-viewport').css('overflowX', 'hidden');
-    }); 
   }); 
   </script>  
 </head>
@@ -44,6 +55,8 @@
   <div data-role="content" data-theme="c">
   
   <h2>Demo</h2>
+    <div data-role="popup" id="popupEnabled"><p>Sortable : Enable</p></div>
+    <div data-role="popup" id="popupDisabled"><p>Sortable : Disable</p></div>
     <ul data-role="listview" data-inset="true" data-theme="d" id="sortable">
       <li data-role="list-divider" class="ui-state-disabled" >List</li>
       <li>Item 1</li>
