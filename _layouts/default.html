@@ -35,7 +35,19 @@
         <li><a href="/projet.html" data-icon="grid">Projets</a></li>
       </ul>
     </div><!-- /navbar -->
-    <a href="/menu.html" data-rel="dialog" data-role="button" data-icon="gear" class="ui-btn-right" data-iconpos="notext" data-iconshadow="false">Menu</a>
+    <a href="#popupMenu" data-rel="popup" data-role="button" data-icon="gear" class="ui-btn-right" data-iconshadow="false">Menu</a>
+    
+    <div data-role="popup" id="popupMenu" data-theme="a">
+        <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="b">
+          <li data-role="list-divider">Menu</li>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/projet.html">Projet</a></li>
+          <li><a href="/archives.html">Archives</a></li>
+          <li><a href="/categories.html">Catégories</a></li>
+          <li><a href="/about.html">A propos</a></li>
+        </ul>
+    </div>
+
   </div><!-- /header -->
 
   <div data-role="content">{{ content }}
