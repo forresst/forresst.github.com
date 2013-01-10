@@ -26,7 +26,6 @@
     });
     $( "#sortable" ).on( "taphold", function() {
       var uiSortableHelper = $( "#sortable" ).find( 'li.ui-sortable-helper' ).length;
-	  console.log(uiSortableHelper);
       if ( uiSortableHelper == 1 ) { return; }
       var sortdisabled = $( "#sortable" ).sortable( "option", "disabled" );
       if ( sortdisabled ) { 
