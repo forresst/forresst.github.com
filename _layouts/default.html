@@ -26,21 +26,20 @@
 </head>
 <body> 
 <div data-role="page">
+  <div data-role="panel" id="panelMenu" data-position="left" data-display="overlay" data-theme="a">
+    <a href="#" data-rel="close" data-role="button" data-theme="b" data-icon="delete" data-inline="true">Fermer le menu</a>
+    <ul data-role="listview" data-inset="true" data-theme="b">
+      <li><a href="/">Blog</a></li>
+      <li><a href="/projet.html">Projet</a></li>
+      <li><a href="/archives.html">Archives</a></li>
+      <li><a href="/categories.html">Categories</a></li>
+      <li><a href="/about.html">A propos</a></li>
+    </ul>
+  </div>
+
   <div data-role="header" data-position="fixed">
     <h1>Forresst's Blog</h1>
-    <a href="#popupMenu" data-rel="popup" data-role="button" data-icon="gear" class="ui-btn-right" data-iconshadow="false">Menu</a>
-    
-    <div data-role="popup" id="popupMenu" data-theme="a">
-        <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="b">
-          <li data-role="list-divider">Menu</li>
-          <li><a href="/">Blog</a></li>
-          <li><a href="/projet.html">Projet</a></li>
-          <li><a href="/archives.html">Archives</a></li>
-          <li><a href="/categories.html">Categories</a></li>
-          <li><a href="/about.html">A propos</a></li>
-        </ul>
-    </div>
-
+    <a href="#panelMenu" data-rel="popup" data-icon="bars" class="ui-btn-left" data-iconshadow="false">Menu</a>
   </div><!-- /header -->
 
   <div data-role="content">{{ content }}
