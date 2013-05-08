@@ -1,0 +1,503 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forresst - Installer Jekyll sous Windows</title>
+  <meta name="author" content="forresst" />
+  <!-- syntax highlighting CSS -->
+  <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="/js/jqm-init.js"></script>
+  <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+  <script src="/js/jquery.ui.touch-punch.min.js"></script>
+  <script>
+  $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+    $( "#sortable" ).bind( "sortstop", function(event, ui) {
+      $('#sortable').listview('refresh');
+    });
+  });
+  </script>
+</head>
+<body> 
+<div data-role="page">
+  <div data-role="header" data-position="fixed">
+    <h1>Forresst's Blog</h1>
+    <a href="#popupMenu" data-rel="popup" data-role="button" data-icon="gear" class="ui-btn-right" data-iconshadow="false">Menu</a>
+    
+    <div data-role="popup" id="popupMenu" data-theme="a">
+        <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="b">
+          <li data-role="list-divider">Menu</li>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/projet.html">Projet</a></li>
+          <li><a href="/archives.html">Archives</a></li>
+          <li><a href="/categories.html">Categories</a></li>
+          <li><a href="/about.html">A propos</a></li>
+        </ul>
+    </div>
+
+  </div><!-- /header -->
+
+  <div data-role="content"><div id="post">
+  <h2>Installer Jekyll sous Windows</h2>
+  <p>Jekyll est un moteur d'analyse pour construire des sites Web statiques à partir de composants dynamiques tels que les templates,
+les partiels, le code de liquide, markdown, etc. Jekyll est intégré dans Github, il est donc possible de créer un blog qui sera
+hébergé par Github. Ce blog est créé avec Jekyll et hébergé par Github.</p>
+
+<p>Comme moi, vous aurez peut être besoin de faire des tests sur votre propre machine. Dans mon cas, je suis sous Windows, donc il faut que j'installe Jekyll sur
+mon PC.</p>
+
+<p>Jekyll est développé sous Ruby et la manière la plus simple pour l'installer c'est d'utiliser <a href="http://docs.rubygems.org/read/chapter/3">RubyGems</a>.
+Rubygems est un utilitaire qui gère l'installation ou la désinstallation d'applications ou de librairies contenus dans des paquets appelés gemme.
+Rubygems permet l'installation locale, à partir d'un fichier .gem ou distant depuis le site http://rubyforge.org</p>
+
+<h3>I) Pré-requis</h3>
+
+<p>Pour installer Jekyll, il faut installer Ruby et RubyGems.</p>
+
+<p>Pour Ruby, vous pouvez trouver différentes versions de l'installateur "RubyInstaller" sur <a href="http://rubyinstaller.org/downloads/">la page de télécharchement</a>.
+La dernière version disponible à l'heure où j'écris ces lignes est la 1.9.3. Voici le lien pour télécharger directement
+<a href="http://rubyforge.org/frs/download.php/75848/rubyinstaller-1.9.3-p125.exe">l'exécutable</a>.</p>
+
+<p>Cette exécutable contient RubyGems, toutefois cette version est incomplète. Il faut installer en plus le "DEVELOPMENT KIT" qui se trouve
+sur la même page de <a href="http://rubyinstaller.org/downloads/">téléchargement</a> que "RubyInstaller". Voici le lien pour télécharger directement le
+<a href="https://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe">fichier</a>.</p>
+
+<p>Vous avez donc maintenant deux fichiers à votre disposition :</p>
+
+<ul>
+<li><p>rubyinstaller-1.9.3-p125.exe</p></li>
+<li><p>DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe</p></li>
+</ul>
+
+
+<h3>II) Installation</h3>
+
+<h4>II-1) Installer Ruby</h4>
+
+<p>1°) Lancez l'exécutable rubyinstaller-1.9.3-p125.exe.</p>
+
+<p>2°) Sur la première fenêtre, choisissez <em>"I accept the Licence"</em>, puis cliquez sur le bouton <em>"Next"</em>.</p>
+
+<p><img src="/images/2012-03-20-Installer-Jekyll-Sous-Windows/ruby_install_1_mini.jpg" alt="Alt &quot;ruby_install_1.jpg&quot;" /></p>
+
+<p>3°) Sur la deuxième fenêtre, choisissez le répertoire d'installation (Par défaut <em>"C:\Ruby193"</em>, mais vous pouvez le modifier.
+Dans l'exemple d'installation, je garde ce répertoire. Ce nom de répertoire sera réutilisé). Puis cochez les trois options et cliquez
+sur le bouton <em>"Install"</em> :</p>
+
+<ul>
+<li><p><em>"Install Tcl/Tk support"</em> : utile pour la suite</p></li>
+<li><p><em>"Add Ruby executables to your PATH"</em> : cela permet de lancer ruby facilement dans n'importe quel répertoire</p></li>
+<li><p><em>"Associate .rb and .rwb files with this Ruby installation"</em> : utile pour la suite</p></li>
+</ul>
+
+
+<p><img src="/images/2012-03-20-Installer-Jekyll-Sous-Windows/ruby_install_2_mini.jpg" alt="Alt &quot;ruby_install_2.jpg&quot;" /></p>
+
+<p>4°) Lorsque l'installation est terminée, cliquez sur le bouton <em>"Finish"</em>.</p>
+
+<p><img src="/images/2012-03-20-Installer-Jekyll-Sous-Windows/ruby_install_3_mini.jpg" alt="Alt &quot;ruby_install_3.jpg&quot;" /></p>
+
+<h4>II-2) Installer le "DEVELOPMENT KIT"</h4>
+
+<p>1°) Lancer l'exécutable DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe</p>
+
+<p>2°) Sur la nouvelle fenêtre, préciser le répertoire suivant : <em>"C:\Ruby193\DevKit\"</em>. Cela permet d'intégrer le "Development Kit" dans un sous répertoire de Ruby.
+Puis cliquez sur le bouton <em>"Extract"</em>.</p>
+
+<p><img src="/images/2012-03-20-Installer-Jekyll-Sous-Windows/ruby_install_4_mini.jpg" alt="Alt &quot;ruby_install_4.jpg&quot;" /></p>
+
+<p>Cela permet d'extraire les fichiers nécessaires pour installer le "Development Kit".</p>
+
+<p>3°) Ouvrez une fenêtre d'invite de commandes (cmd), placez vous dans le répertoire <em>c:\Ruby193\DevKit</em> et exécutez la commande initialisation (<em>ruby dk.rb init</em>) :</p>
+
+<div class="highlight"><pre><code class="text">c:\&gt;cd c:\Ruby193\DevKit
+c:\Ruby193\DevKit&gt;ruby dk.rb init
+</code></pre></div>
+
+
+<p>Vous obtiendrez le résultat suivant :</p>
+
+<div class="highlight"><pre><code class="text">[INFO] found RubyInstaller v1.9.3 at C:/Ruby193
+
+Initialization complete! Please review and modify the auto-generated
+&#39;config.yml&#39; file to ensure it contains the root directories to all
+of the installed Rubies you want enhanced by the DevKit.
+</code></pre></div>
+
+
+<p>4°) Ensuite lancez l'installation (<em>ruby dk.rb install</em>) :</p>
+
+<div class="highlight"><pre><code class="text">c:\Ruby193\DevKit&gt;ruby dk.rb install
+</code></pre></div>
+
+
+<p>Vous obtiendrez le résultat suivant :</p>
+
+<div class="highlight"><pre><code class="text">[INFO] Updating convenience notice gem override for &#39;C:/Ruby193&#39;
+[INFO] Installing &#39;C:/Ruby193/lib/ruby/site_ruby/devkit.rb&#39;
+</code></pre></div>
+
+
+<p>A partir de maintenant, vous avez RubyGems installé correctement.</p>
+
+<h4>II-3) Installer Jekyll</h4>
+
+<p>1°) Pour installer Jekyll, cela devient très facile grâce à RubyGems, il suffit simplement de lancer l'installation via la ligne de commande suivante :</p>
+
+<div class="highlight"><pre><code class="text">c:\Ruby193&gt;gem install jekyll
+</code></pre></div>
+
+
+<p>Vous obtiendrez le résultat suivant :</p>
+
+<div class="highlight"><pre><code class="text">Fetching: liquid-2.3.0.gem (100%)
+Fetching: fast-stemmer-1.0.0.gem (100%)
+Temporarily enhancing PATH to include DevKit...
+Building native extensions.  This could take a while...
+Fetching: classifier-1.3.3.gem (100%)
+Fetching: directory_watcher-1.4.1.gem (100%)
+Fetching: syntax-1.0.0.gem (100%)
+Fetching: maruku-0.6.0.gem (100%)
+Fetching: kramdown-0.13.5.gem (100%)
+Fetching: posix-spawn-0.3.6.gem (100%)
+Building native extensions.  This could take a while...
+Fetching: albino-1.3.3.gem (100%)
+Fetching: jekyll-0.11.2.gem (100%)
+Successfully installed liquid-2.3.0
+Successfully installed fast-stemmer-1.0.0
+Successfully installed classifier-1.3.3
+Successfully installed directory_watcher-1.4.1
+Successfully installed syntax-1.0.0
+Successfully installed maruku-0.6.0
+Successfully installed kramdown-0.13.5
+Successfully installed posix-spawn-0.3.6
+Successfully installed albino-1.3.3
+Successfully installed jekyll-0.11.2
+10 gems installed
+Installing ri documentation for liquid-2.3.0...
+Installing ri documentation for fast-stemmer-1.0.0...
+Installing ri documentation for classifier-1.3.3...
+Installing ri documentation for directory_watcher-1.4.1...
+Installing ri documentation for syntax-1.0.0...
+Installing ri documentation for maruku-0.6.0...
+Couldn&#39;t find file to include &#39;MaRuKu.txt&#39; from lib/maruku.rb
+Installing ri documentation for kramdown-0.13.5...
+Installing ri documentation for posix-spawn-0.3.6...
+Installing ri documentation for albino-1.3.3...
+Installing ri documentation for jekyll-0.11.2...
+Installing RDoc documentation for liquid-2.3.0...
+Installing RDoc documentation for fast-stemmer-1.0.0...
+Installing RDoc documentation for classifier-1.3.3...
+Installing RDoc documentation for directory_watcher-1.4.1...
+Installing RDoc documentation for syntax-1.0.0...
+Installing RDoc documentation for maruku-0.6.0...
+Couldn&#39;t find file to include &#39;MaRuKu.txt&#39; from lib/maruku.rb
+Installing RDoc documentation for kramdown-0.13.5...
+Installing RDoc documentation for posix-spawn-0.3.6...
+Installing RDoc documentation for albino-1.3.3...
+Installing RDoc documentation for jekyll-0.11.2...
+</code></pre></div>
+
+
+<p>RubyGems installe Jekyll ainsi que toutes les dépendances utiles pour Jekyll.</p>
+
+<p>2°) Nous allons installer un gem complémentaire : rdiscount.</p>
+
+<div class="highlight"><pre><code class="text">c:\Ruby193&gt;gem install rdiscount
+</code></pre></div>
+
+
+<p>Vous obtiendrez le résultat suivant :</p>
+
+<div class="highlight"><pre><code class="text">Fetching: rdiscount-1.6.8.gem (100%)
+Temporarily enhancing PATH to include DevKit...
+Building native extensions.  This could take a while...
+Successfully installed rdiscount-1.6.8
+1 gem installed
+Installing ri documentation for rdiscount-1.6.8...
+Installing RDoc documentation for rdiscount-1.6.8...
+</code></pre></div>
+
+
+<h3>III) Utilisation</h3>
+
+<h4>Tester avec les données de ce blog</h4>
+
+<p>Pour tester Jekyll en local, je vous propose de télécharger ce blog.
+Veuillez suivre ce <a href="https://github.com/forresst/forresst.github.com/zipball/master">lien</a> qui contient un fichier zippé du blog.</p>
+
+<p>Dézippez le fichier où bon vous semble (par exemple c:\forresst.github.com). Puis positionnez vous par une invite de commande dans ce répertoire.
+Toujours par l'invite de commande lancez Jekyll :</p>
+
+<div class="highlight"><pre><code class="text">c:\forresst.github.com&gt;jekyll --server
+</code></pre></div>
+
+
+<p>Le serveur Jekyll est maintenant opérationnel. Attention, ne fermez pas la fenêtre d'invite de commande, sinon vous arrêter le serveur.</p>
+
+<p>Enfin, ouvrez votre navigateur préféré et tapez l'adresse <em>localhost:4000</em>, vous devez normalement voir apparaitre le blog.</p>
+
+<h3>IV) Astuces</h3>
+
+<h4>IV-1) Problème de codage de caractère</h4>
+
+<p>Lorsque vous lancer le serveur Jekyll (<em>jekyll --server</em>) sous Windows, vous avez de grande chance de voir apparaitre cette erreur :
+<em>"Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post"</em>. Ce problème est du à l'encodage des fichiers qui sont
+en UTF-8, alors que Windows travaille sous l'encodage CP850. Voici un exemple d'erreur :</p>
+
+<div class="highlight"><pre><code class="text">c:\forresst.github.com&gt;jekyll --server
+C:/Ruby193/lib/ruby/site_ruby/1.9.1/rubygems/custom_require.rb:36:in `require&#39;: iconv will be deprecated in the future, use String#encode instead.
+Configuration from c:/forresst.github.com/_config.yml
+Auto-regenerating enabled: c:/forresst.github.com -&gt; c:/forresst.github.com/_site
+[2012-03-18 16:17:46] regeneration: 42 files changed
+Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
+Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
+Liquid Exception: incompatible character encodings: UTF-8 and CP850 in post
+Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
+Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
+Liquid Exception: incompatible character encodings: UTF-8 and CP850 in post
+Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
+Liquid Exception: incompatible character encodings: CP850 and UTF-8 in post
+[2012-03-18 16:17:47] INFO  WEBrick 1.3.1
+[2012-03-18 16:17:47] INFO  ruby 1.9.3 (2012-02-16) [i386-mingw32]
+[2012-03-18 16:17:47] INFO  WEBrick::HTTPServer#start: pid=6756 port=4000
+</code></pre></div>
+
+
+<p>Ces erreurs peuvent avoir un impact sur l'affichage du blog. Et même dans certains cas, cela peut empêcher le bon fonctionnement de Jekyll. Il existe une parade à ce problème.
+Il suffit simplement de lancer les commandes suivantes avant de lancer le serveur Jekyll :</p>
+
+<div class="highlight"><pre><code class="text">set LC_ALL=en_US.UTF-8
+set LANG=en_US.UTF-8
+</code></pre></div>
+
+
+<p>Cette commande permet de dire à Windows que l'encodage a utilisé est l'UTF-8. Si vous relancez Jekyll après cette manipulation, ces errurs auront disparus.</p>
+
+<h4>IV-2) La mise en évidence ne fonctionne pas</h4>
+
+<p>Grâce à Pygments (qui est inclus dans Jekyll), vous pouvez mettre en évidence votre code. Par exemple, pour mettre du javascript en évidence, vous devez entourer
+votre code entre <em>&#123;% highlight javascript %}</em> et <em>&#123;% endhighlight %}</em>. Vous pouvez trouvez plus de détail sur
+<a href="https://github.com/mojombo/jekyll/wiki/liquid-extensions">cette page</a>. Et voici un exemple de code javascript :</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">//collapse page navs after use</span>
+<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">delegate</span><span class="p">(</span><span class="s1">&#39;.content-secondary .ui-collapsible-content&#39;</span><span class="p">,</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span>  <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;collapse&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+
+
+<span class="c1">// Turn off AJAX for local file browsing</span>
+<span class="k">if</span> <span class="p">(</span> <span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>  <span class="o">===</span> <span class="s1">&#39;file&#39;</span> <span class="o">||</span>
+     <span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;*-extension&#39;</span> <span class="o">||</span>
+     <span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>  <span class="o">===</span> <span class="s1">&#39;widget&#39;</span> <span class="p">)</span> <span class="p">{</span>
+<span class="p">...</span>
+</code></pre></div>
+
+
+<p>Là encore, sous Windows, cela ne fonctionne pas, le résultat du code est souvent remplacé par <em>Liquid error: Bad file descriptor</em>.</p>
+
+<p>Il existe un <a href="https://gist.github.com/1185645">patch</a> à utiliser sur le gem albino (aussi inclus dans Jekyll). Pour la version 1.3.3, il faut modifier le fichier
+<em>C:\ruby193\lib\ruby\gems\1.9.1\gems\albino-1.3.3\lib\albino.rb</em>, voici le fichier complet modifié :</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;posix-spawn&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;rbconfig&#39;</span>
+
+<span class="c1">##</span>
+<span class="c1"># Wrapper for the Pygments command line tool, pygmentize.</span>
+<span class="c1">#</span>
+<span class="c1"># Pygments: http://pygments.org/</span>
+<span class="c1">#</span>
+<span class="c1"># Assumes pygmentize is in the path.  If not, set its location</span>
+<span class="c1"># with Albino.bin = &#39;/path/to/pygmentize&#39;</span>
+<span class="c1">#</span>
+<span class="c1"># Use like so:</span>
+<span class="c1">#</span>
+<span class="c1">#   @syntaxer = Albino.new(&#39;puts &quot;Hello World&quot;&#39;, :ruby)</span>
+<span class="c1">#   puts @syntaxer.colorize</span>
+<span class="c1">#</span>
+<span class="c1"># This&#39;ll print out an HTMLized, Ruby-highlighted version</span>
+<span class="c1"># of &#39;/some/file.rb&#39;.</span>
+<span class="c1">#</span>
+<span class="c1"># To use another formatter, pass it as the third argument:</span>
+<span class="c1">#</span>
+<span class="c1">#   @syntaxer = Albino.new(&#39;puts &quot;Hello World&quot;&#39;, :ruby, :bbcode)</span>
+<span class="c1">#   puts @syntaxer.colorize</span>
+<span class="c1">#</span>
+<span class="c1"># You can also use the #colorize class method:</span>
+<span class="c1">#</span>
+<span class="c1">#   puts Albino.colorize(&#39;puts &quot;Hello World&quot;&#39;, :ruby)</span>
+<span class="c1">#</span>
+<span class="c1"># To format a file, pass a file stream:</span>
+<span class="c1">#</span>
+<span class="c1">#   puts Albino.colorize(File.new(&#39;/some/file.rb&#39;), :ruby)</span>
+<span class="c1">#</span>
+<span class="c1"># Another also: you get a #to_s, for somewhat nicer use in Rails views.</span>
+<span class="c1">#</span>
+<span class="c1">#   ... helper file ...</span>
+<span class="c1">#   def highlight(text)</span>
+<span class="c1">#     Albino.new(text, :ruby)</span>
+<span class="c1">#   end</span>
+<span class="c1">#</span>
+<span class="c1">#   ... view file ...</span>
+<span class="c1">#   &lt;%= highlight text %&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># The default lexer is &#39;text&#39;.  You need to specify a lexer yourself;</span>
+<span class="c1"># because we are using STDIN there is no auto-detect.</span>
+<span class="c1">#</span>
+<span class="c1"># To see all lexers and formatters available, run `pygmentize -L`.</span>
+<span class="c1">#</span>
+<span class="c1"># Chris Wanstrath // chris@ozmm.org</span>
+<span class="c1">#         GitHub // http://github.com</span>
+<span class="c1">#</span>
+<span class="k">class</span> <span class="nc">Albino</span>
+  <span class="k">class</span> <span class="nc">ShellArgumentError</span> <span class="o">&lt;</span> <span class="no">ArgumentError</span><span class="p">;</span> <span class="k">end</span>
+  <span class="kp">include</span> <span class="ss">POSIX</span><span class="p">:</span><span class="ss">:Spawn</span>
+
+  <span class="no">VERSION</span> <span class="o">=</span> <span class="s1">&#39;1.3.3&#39;</span>
+
+  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+    <span class="kp">attr_accessor</span> <span class="ss">:bin</span><span class="p">,</span> <span class="ss">:timeout_threshold</span>
+    <span class="kp">attr_reader</span> <span class="ss">:default_encoding</span>
+
+    <span class="k">def</span> <span class="nf">default_encoding</span><span class="o">=</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+      <span class="c1"># make sure the encoding is valid</span>
+      <span class="no">Encoding</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span> <span class="k">if</span> <span class="n">defined?</span><span class="p">(</span><span class="no">Encoding</span><span class="p">)</span>
+
+      <span class="vi">@default_encoding</span> <span class="o">=</span> <span class="n">encoding</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="nb">self</span><span class="o">.</span><span class="n">timeout_threshold</span> <span class="o">=</span> <span class="mi">10</span>
+  <span class="nb">self</span><span class="o">.</span><span class="n">default_encoding</span>  <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+  <span class="nb">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="s1">&#39;pygmentize&#39;</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">colorize</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="kp">new</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">colorize</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">lexer</span> <span class="o">=</span> <span class="ss">:text</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="ss">:html</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">)</span>
+    <span class="vi">@target</span>  <span class="o">=</span> <span class="n">target</span>
+    <span class="vi">@options</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:l</span> <span class="o">=&gt;</span> <span class="n">lexer</span><span class="p">,</span> <span class="ss">:f</span> <span class="o">=&gt;</span> <span class="nb">format</span><span class="p">,</span> <span class="ss">:O</span> <span class="o">=&gt;</span> <span class="s2">&quot;encoding=</span><span class="si">#{</span><span class="n">encoding</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+    <span class="vi">@encoding</span> <span class="o">=</span> <span class="n">encoding</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="n">proc_options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">proc_options</span><span class="o">[</span><span class="ss">:timeout</span><span class="o">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:timeout</span><span class="p">)</span> <span class="o">||</span> <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">timeout_threshold</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="n">convert_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+    <span class="n">command</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="n">bin</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ss">RbConfig</span><span class="p">:</span><span class="ss">:CONFIG</span><span class="o">[</span><span class="s1">&#39;host_os&#39;</span><span class="o">]</span> <span class="o">=~</span> <span class="sr">/(mingw|mswin)/</span>
+      <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+      <span class="no">IO</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r+&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">p</span><span class="o">|</span>
+        <span class="nb">p</span><span class="o">.</span><span class="n">write</span> <span class="vi">@target</span>
+        <span class="nb">p</span><span class="o">.</span><span class="n">close_write</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">p</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">strip</span>
+      <span class="k">end</span>
+      <span class="n">output</span>
+    <span class="k">else</span>
+      <span class="no">Child</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="o">[</span><span class="n">proc_options</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="ss">:input</span> <span class="o">=&gt;</span> <span class="n">write_target</span><span class="p">)</span><span class="o">]</span><span class="p">))</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">colorize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="ss">RbConfig</span><span class="p">:</span><span class="ss">:CONFIG</span><span class="o">[</span><span class="s1">&#39;host_os&#39;</span><span class="o">]</span> <span class="o">=~</span> <span class="sr">/(mingw|mswin)/</span> <span class="p">?</span> <span class="n">execute</span><span class="p">(</span><span class="n">options</span><span class="p">)</span> <span class="p">:</span> <span class="n">execute</span><span class="p">(</span><span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">out</span>
+
+    <span class="c1"># markdown requires block elements on their own line</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">sub!</span><span class="p">(</span><span class="sr">%r{&lt;/pre&gt;&lt;/div&gt;\Z}</span><span class="p">,</span> <span class="s2">&quot;&lt;/pre&gt;</span><span class="se">\n</span><span class="s2">&lt;/div&gt;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># covert output to the encoding we told pygmentize to use</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">force_encoding</span><span class="p">(</span><span class="vi">@encoding</span><span class="p">)</span> <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:force_encoding</span><span class="p">)</span>
+
+    <span class="n">out</span>
+  <span class="k">end</span>
+  <span class="n">alias_method</span> <span class="ss">:to_s</span><span class="p">,</span> <span class="ss">:colorize</span>
+
+  <span class="k">def</span> <span class="nf">convert_options</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@options</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">|</span>
+      <span class="n">validate_shell_args</span><span class="p">(</span><span class="n">flag</span><span class="o">.</span><span class="n">to_s</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span>
+      <span class="n">memo</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;-</span><span class="si">#{</span><span class="n">flag</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">value</span><span class="o">.</span><span class="n">to_s</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">write_target</span>
+    <span class="k">if</span> <span class="vi">@target</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:read</span><span class="p">)</span>
+      <span class="n">out</span> <span class="o">=</span> <span class="vi">@target</span><span class="o">.</span><span class="n">read</span>
+      <span class="vi">@target</span><span class="o">.</span><span class="n">close</span>
+      <span class="n">out</span>
+    <span class="k">else</span>
+      <span class="vi">@target</span><span class="o">.</span><span class="n">to_s</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">validate_shell_args</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">flag</span> <span class="o">!~</span> <span class="sr">/^[a-z]+$/i</span>
+      <span class="k">raise</span> <span class="no">ShellArgumentError</span><span class="p">,</span> <span class="s2">&quot;Flag is invalid: </span><span class="si">#{</span><span class="n">flag</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">end</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">!~</span> <span class="sr">/^[a-z0-9\-\_\+\=\#\,\s]+$/i</span>
+      <span class="k">raise</span> <span class="no">ShellArgumentError</span><span class="p">,</span> <span class="s2">&quot;Flag value is invalid: -</span><span class="si">#{</span><span class="n">flag</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">value</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">bin</span>
+    <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">bin</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+</div>
+
+<div class="whoring">
+  <hr>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'forresst'; // required: replace example with your forum shortname
+    var disqus_identifier = 'Installer Jekyll sous Windows';
+
+    // The following are highly recommended additional parameters. Remove the slashes in front to use.
+    // var disqus_identifier = 'unique_dynamic_id_1234';
+    // var disqus_url = 'http://example.com/permalink-to-page.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<div>
+  <ul data-role="listview" data-inset="true" data-theme="d">
+  <li data-role="list-divider">Articles recents</li>
+  
+    <li><a href="/2012/07/16/Comment-utiliser-jQueryMobile-et-Backbone-pour-gerer-des-formulaires/">16/07/2012 - Comment utiliser jQuery Mobile et Backbone.js pour gérer des formulaires</a></li>
+  
+    <li><a href="/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/">22/06/2012 - Make a list jQuery Mobile sortable by drag & drop</a></li>
+  
+    <li><a href="/2012/06/22/Faire-une-liste-jQuery-Mobile-triable-par-drag-and-drop/">22/06/2012 - Faire une liste jQuery Mobile triable par drag & drop</a></li>
+  
+  </ul>
+</div>
+  </div><!-- /content -->
+
+  <div data-role="footer" class="ui-bar">
+    <div data-role="controlgroup" data-type="horizontal">
+      <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>
+    </div>
+  </div><!-- /footer -->
+
+</div><!-- /page -->
+
+</body>
+</html>

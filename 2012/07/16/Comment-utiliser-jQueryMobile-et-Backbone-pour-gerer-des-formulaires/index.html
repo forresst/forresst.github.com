@@ -1,0 +1,443 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forresst - Comment utiliser jQuery Mobile et Backbone.js pour gérer des formulaires</title>
+  <meta name="author" content="forresst" />
+  <!-- syntax highlighting CSS -->
+  <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="/js/jqm-init.js"></script>
+  <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+  <script src="/js/jquery.ui.touch-punch.min.js"></script>
+  <script>
+  $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+    $( "#sortable" ).bind( "sortstop", function(event, ui) {
+      $('#sortable').listview('refresh');
+    });
+  });
+  </script>
+</head>
+<body> 
+<div data-role="page">
+  <div data-role="header" data-position="fixed">
+    <h1>Forresst's Blog</h1>
+    <a href="#popupMenu" data-rel="popup" data-role="button" data-icon="gear" class="ui-btn-right" data-iconshadow="false">Menu</a>
+    
+    <div data-role="popup" id="popupMenu" data-theme="a">
+        <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="b">
+          <li data-role="list-divider">Menu</li>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/projet.html">Projet</a></li>
+          <li><a href="/archives.html">Archives</a></li>
+          <li><a href="/categories.html">Categories</a></li>
+          <li><a href="/about.html">A propos</a></li>
+        </ul>
+    </div>
+
+  </div><!-- /header -->
+
+  <div data-role="content"><div id="post">
+  <h2>Comment utiliser jQuery Mobile et Backbone.js pour gérer des formulaires</h2>
+  <p><em>Ceci est une traduction d'un article du blog de CHARIOT Solutions, voici le lien vers la <a href="http://blog.chariotsolutions.com/2012/02/using-jquerymobile-and-backbonejs-for.html" rel="external" data-role="button" data-inline="true" data-mini="true">version originale</a>.</em></p>
+
+<h3>Introduction</h3>
+
+<p>Dans cet article, je continue le développement de mon application "exercice" que j'ai commencé (et amélioré) dans ces articles :</p>
+
+<ul>
+<li><p><a href="/2012/03/01/Backbone-et-jQuery-Mobile/" data-role="button" data-inline="true" data-mini="true">Introduction à Backbone.js avec jQuery Mobile</a></p></li>
+<li><p><a href="/2012/03/31/Tri-des-collections-avec-Backbone-et-jQuery-Mobile/" data-role="button" data-inline="true" data-mini="true">Tri des collections avec Backbone.js et jQuery Mobile</a></p></li>
+<li><p><a href="/2012/04/04/Depuis-une-Liste-vers-une-vue-detail-en-utilisant-jQueryMobile-et-Backbone/" data-role="button" data-inline="true" data-mini="true">Depuis une liste vers une vue détail en utilisant jQueryMobile et Backbone.js</a></p></li>
+</ul>
+
+
+<p>Ajoutons la possibilité de créer et modifier des enregistrements dans l'application.</p>
+
+<h3>Ajout d'une nouvelle activité</h3>
+
+<p>Tout comme dans l'article précédent, la première chose que nous avons besoin, c'est une page jQueryMobile pour recevoir le contenu du formulaire. Ajoutez les lignes suivantes à index.html :</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno"> 1</span> <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;page&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-form&quot;</span> <span class="na">data-add-back-btn=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="lineno"> 2</span>   <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+<span class="lineno"> 3</span>     <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">data-role=</span><span class="s">&quot;button&quot;</span> <span class="na">data-icon=</span><span class="s">&quot;check&quot;</span> <span class="na">data-theme=</span><span class="s">&quot;b&quot;</span> <span class="na">data-rel=</span><span class="s">&quot;back&quot;</span> <span class="na">id=</span><span class="s">&quot;save-activity-button&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-btn-right&quot;</span><span class="nt">&gt;</span>Save<span class="nt">&lt;/a&gt;</span>
+<span class="lineno"> 4</span>     <span class="nt">&lt;h1&gt;</span>New Activity<span class="nt">&lt;/h1&gt;</span>
+<span class="lineno"> 5</span>   <span class="nt">&lt;/div&gt;</span>
+<span class="lineno"> 6</span>   <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;content&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-form-content&quot;</span><span class="nt">&gt;</span>
+<span class="lineno"> 7</span>       <span class="c">&lt;!-- the contents of the form will be rendered via the backbone view --&gt;</span>
+<span class="lineno"> 8</span>       <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;activity-form-form&quot;</span> <span class="na">action=</span><span class="s">&quot;#&quot;</span><span class="nt">&gt;&lt;/form&gt;</span>
+<span class="lineno"> 9</span>   <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">10</span> <span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+
+
+<p>Dans le code ci-dessus, nous voyons une page typique de jQueryMobile. Les principales choses qui nous intéressent ici sont la balise d'ancrage dans le div <em>header</em> :</p>
+
+<ul>
+<li><p>Spécifiez <em>data-rel="back"</em> pour accédez à la page précédente dès que la sauvegarde est terminée. De cette façon, si nous entrons dans la page du formulaire depuis "Add" ou "Edit", la navigation sera gérée.</p></li>
+<li><p>Le <em>class="ui-btn-right"</em>  déplace le bouton sur le côté droit de la barre d'entête.</p></li>
+<li><p>Le <em>data-theme="b"</em> permet que le bouton <em>save</em> utilise le thème bleu.</p></li>
+</ul>
+
+
+<p>L'étape suivante consiste à définir le template que la vue utilisera pour rendre le contenu de cette page. Commençons par un simple template avec une saisie pour chaque attribut d'activity. Pour varier un peu l'interface utilisateur, nous pouvons utiliser un menu déroulant pour le type d'activité. Le template de base devrait ressembler à ceci :</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno"> 1</span> <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-form-template&quot;</span><span class="nt">&gt;</span>
+<span class="lineno"> 2</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;select&quot;</span><span class="o">&gt;</span><span class="nb">Date</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno"> 3</span>     <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Date&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= date %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno"> 4</span>      
+<span class="lineno"> 5</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;type&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;select&quot;</span><span class="o">&gt;</span><span class="nx">Type</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno"> 6</span>     <span class="o">&lt;</span><span class="nx">select</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;type&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;type&quot;</span><span class="o">&gt;</span>
+<span class="lineno"> 7</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Run</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno"> 8</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Bike</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno"> 9</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Swim</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno">10</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Walk</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno">11</span>     <span class="o">&lt;</span><span class="err">/select&gt;</span>
+<span class="lineno">12</span>      
+<span class="lineno">13</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;distance&quot;</span><span class="o">&gt;</span><span class="nx">Distance</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno">14</span>     <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;distance&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;distance&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= distance %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno">15</span>  
+<span class="lineno">16</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;minutes&quot;</span><span class="o">&gt;</span><span class="nx">Minutes</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno">17</span>     <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;tel&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;minutes&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;minutes&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= minutes %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno">18</span>      
+<span class="lineno">19</span>     <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">data</span><span class="o">-</span><span class="nx">role</span><span class="o">=</span><span class="s2">&quot;fieldcontain&quot;</span><span class="o">&gt;</span>
+<span class="lineno">20</span>         <span class="o">&lt;</span><span class="nx">textarea</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;comments&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;comments&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Comments&quot;</span><span class="o">&gt;&lt;%=</span> <span class="nx">comments</span> <span class="o">%&gt;&lt;</span><span class="err">/textarea&gt;</span>
+<span class="lineno">21</span>     <span class="o">&lt;</span><span class="err">/div&gt;</span>
+<span class="lineno">22</span> <span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+
+
+<p>Notez que nous utilisons les 5 types d'<em>input</em> HTML pour les champs. Les navigateurs qui prennent en charge ceux-ci varie, mais le pire des cas, ils déprécient le type d'<em>input</em> vers un saisie de type texte. Par exemple, sur iOS, la date présentera un sélecteur de date natif, alors que sur Android (ou Chrome, etc) le champ se comportera comme une saisie de texte standard.</p>
+
+<p>Maintenant nous avons besoin de naviguer vers la page du formulaire. Cela demande de modifier le bouton "Add" sur la page de la liste.</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno">1</span> <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;page&quot;</span> <span class="na">id=</span><span class="s">&quot;activities&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">2</span>   <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">3</span>     <span class="nt">&lt;h1&gt;</span>Activities<span class="nt">&lt;/h1&gt;</span>
+<span class="lineno">4</span>     <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#activity-form&quot;</span> <span class="na">data-role=</span><span class="s">&quot;button&quot;</span> <span class="na">data-icon=</span><span class="s">&quot;add&quot;</span> <span class="na">id=</span><span class="s">&quot;add-button&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-btn-right&quot;</span><span class="nt">&gt;</span>Add<span class="nt">&lt;/a&gt;</span>
+<span class="lineno">5</span>   <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">6</span>   <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">7</span>       <span class="c">&lt;!-- Les éléments de la liste seront rendus par la vue backbone --&gt;</span>
+<span class="lineno">8</span>   <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">9</span> <span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+
+
+<p>Pour faire la transition vers la page du formulaire, l'attribut <em>href</em> sur ​​la balise d'ancrage (par exemple button) doit être changé par l'<em>id</em> de la page du formulaire, comme indiqué dans la ligne 4 ci-dessus. La dernière étape dans la présentation de la page de formulaire pour supporter l'ajout d'activités est la modification du gestionnaire du clic du bouton <em>add</em>.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#add-button&#39;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno">2</span>     <span class="kd">var</span> <span class="nx">activity</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activity</span><span class="p">(),</span>
+<span class="lineno">3</span>         <span class="nx">activityForm</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activity-form-form&#39;</span><span class="p">),</span>
+<span class="lineno">4</span>         <span class="nx">activityFormView</span><span class="p">;</span>
+<span class="lineno">5</span>  
+<span class="lineno">6</span>     <span class="nx">activityFormView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">ActivityFormView</span><span class="p">({</span><span class="nx">model</span><span class="o">:</span> <span class="nx">activity</span><span class="p">,</span> <span class="nx">viewContainer</span><span class="o">:</span> <span class="nx">activityForm</span><span class="p">});</span>
+<span class="lineno">7</span>     <span class="nx">activityFormView</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+<span class="lineno">8</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>Ici, nous créons un modèle vide, prenez le nœud du formulaire, créez un nouveau <em>exercise.ActivityFormView</em> avec ces objets, et lancez le rendu du formulaire. Les tests à ce point témoigne d'un problème. La capture d'écran ci-dessous ne s'affiche pas ;)</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot.png" alt="Alt &quot;ScreenShot.png&quot;" /></p>
+
+<p>En investigant dans la console du navigateur, on découvre l'erreur : <em>Uncaught ReferenceError: distance is not defined</em>. Cela est du au template essayant d'accéder à un attribut indéfini du modèle. Le problème est décrit <a href="https://github.com/documentcloud/underscore/issues/237" rel="external" data-role="button" data-inline="true" data-mini="true">ici</a> avec quelques moyens pour le contourner. J'ai trouvé que la solution de contournement est plus facile pour fournir des valeurs par défaut pour le modèle, comme illustré ci-dessous.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activity</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<span class="lineno">2</span>    <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">3</span>        <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">4</span>        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">5</span>        <span class="nx">distance</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">6</span>        <span class="nx">comments</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">7</span>        <span class="nx">minutes</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+<span class="lineno">8</span>    <span class="p">}</span>
+<span class="lineno">9</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>Maintenant le formulaire est bien rendu. Avec l'aide de certains CSS, on peut serrer un peu les choses et se retrouver avec la version de droite (le CSS fait partie du code source, consultez les liens à la fin de cet article).</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot2.png" alt="Alt &quot;ScreenShot2.png&quot;" />
+<img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot3.png" alt="Alt &quot;ScreenShot3.png&quot;" /></p>
+
+<h3>Modifier une activité existante</h3>
+
+<p>Comme le modèle et la vue sont déjà implémentés, l'ajout de fonctionnalités de modification est assez simple. La première étape consiste à mettre à jour l'attribut href du bouton de modification sur la page détail d'activity.</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno">1</span> <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;page&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-details&quot;</span> <span class="na">data-add-back-btn=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">2</span>   <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">3</span>     <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#activity-form&quot;</span> <span class="na">data-role=</span><span class="s">&quot;button&quot;</span> <span class="na">data-icon=</span><span class="s">&quot;arrow-d&quot;</span> <span class="na">id=</span><span class="s">&quot;edit-activity-button&quot;</span> <span class="na">class=</span><span class="s">&quot;ui-btn-right&quot;</span><span class="nt">&gt;</span>Edit<span class="nt">&lt;/a&gt;</span>
+<span class="lineno">4</span>     <span class="nt">&lt;h1&gt;</span>Activity Details<span class="nt">&lt;/h1&gt;</span>
+<span class="lineno">5</span>   <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">6</span>   <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;content&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-details-content&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">7</span>       <span class="c">&lt;!-- Les éléments de la liste seront rendus par la vue backbone --&gt;</span>
+<span class="lineno">8</span>   <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">9</span> <span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+
+
+<p>Comme nous l'avons fait avec le bouton d'ajout, qui référencait la page formulaire d'activity. Maintenant, nous devons ajouter le gestionnaire d'événement du clic pour le bouton de modification.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#edit-activity-button&#39;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">2</span>     <span class="kd">var</span> <span class="nx">activityId</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activity-details&#39;</span><span class="p">).</span><span class="nx">jqmData</span><span class="p">(</span><span class="s1">&#39;activityId&#39;</span><span class="p">),</span>
+<span class="lineno">3</span>         <span class="nx">activityModel</span> <span class="o">=</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">activityId</span><span class="p">),</span>
+<span class="lineno">4</span>         <span class="nx">activityForm</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activity-form-form&#39;</span><span class="p">),</span>
+<span class="lineno">5</span>         <span class="nx">activityFormView</span><span class="p">;</span>
+<span class="lineno">6</span>      
+<span class="lineno">7</span>     <span class="nx">activityFormView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">ActivityFormView</span><span class="p">({</span><span class="nx">model</span><span class="o">:</span> <span class="nx">activityModel</span><span class="p">,</span> <span class="nx">viewContainer</span><span class="o">:</span> <span class="nx">activityForm</span><span class="p">});</span>
+<span class="lineno">8</span>     <span class="nx">activityFormView</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+<span class="lineno">9</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>Si vous vous souvenez, l'activityId est transmis à la vue de la page de détails par la gestion de l'évement du click sur un élément de la liste. Nous allons le réutiliser ici pour récupérer l'activité de la collection.</p>
+
+<p>Il est temps de tester. En choisissant une activité, la page de détail est rendu. En cliquant sur le bouton de modification, cela affiche le formulaire pré-rempli avec les détails de l'activité. Tout est superbe.</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot4.png" alt="Alt &quot;ScreenShot4.png&quot;" /></p>
+
+<p>Mais attendez ..... cette capture d'écran a été faite à partir du navigateur sur lequel je teste. Nous devons toujours le tester sur les appareils mobiles. J'ai mentionné plus tôt que nous utilisions quelques types d'<em>input</em> HTML 5 (à savoir la date). La bonne chose est que iOS 5 affichera un sélecteur de date sympa pour les types <em>date</em>. Le défi est que la date soit dans un format spécifique pour que cela fonctionne. L'image ci-dessous montre à quoi ressemble la page du formulaire sur un appareil iOS.</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot5.png" alt="Alt &quot;ScreenShot5.png&quot;" /></p>
+
+<h3>Correction de la date</h3>
+
+<p>Aucune valeur de date ne s'affiche sur notre appareil iOS. Il s'agit d'un <a href="https://github.com/jquery/jquery-mobile/issues/2755" rel="external" data-role="button" data-inline="true" data-mini="true">problème</a> connu. Donc, pour iOS nous devons avoir le format de date à yyyy-mm-dd, tandis que pour d'autres plateformes, je préfère que la date soit visible ainsi mm/dd/yyyy. Je me rends compte que les formats de date doivent être localisées, mais dans le besoin de cet exemple, je tiens à la garder simple et précise mm/dd/yyyy comme le format de date de l'affichage. Il existe de nombreuses options qui pourraient être décrites ici, mais pour démontrer encore plus les capacités de Backbone.js, nous allons modifier notre modèle afin de répondre à nos exigences de date.</p>
+
+<p>Tout d'abord, l'attribut date dans notre flux JSON est une chaîne. Convertissons ceci en une date où les données seront récupérées à partir du serveur, puis quand nous aurons besoin de la date, nous pourrons tout simplement la manipuler. Ceci peut être accompli de plusieurs façons.</p>
+
+<ul>
+<li>Implémenter une méthode d'analyse sur la collection qui convertit la chaîne en une date lorsque les données sont récupérées à partir du serveur.</li>
+<li>Implémenter une méthode sur le modèle qui convertit la chaîne en une date et le définit sur ​​le modèle. Ce serait alors d'exiger au code appelant qu'il sache appeler cette méthode en fonction de la circonstance.</li>
+<li>Substituer la méthode set sur ​​le modèle, regarder l'attribut date, puis le convertir en une date en fonction des besoins.</li>
+</ul>
+
+
+<p>La dernière option est l'approche la plus solide. Ajoutez la méthode suivante pour le modèle Activity.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno"> 1</span> <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 2</span>     <span class="kd">var</span> <span class="nx">aDate</span><span class="p">;</span>
+<span class="lineno"> 3</span>     <span class="k">if</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">date</span><span class="p">){</span>
+<span class="lineno"> 4</span>         <span class="c1">//A FAIRE lors d&#39;une prochaine version - vérifier que la date à un format valide</span>
+<span class="lineno"> 5</span>         <span class="nx">aDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">date</span><span class="p">);</span>
+<span class="lineno"> 6</span>         <span class="k">if</span> <span class="p">(</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">aDate</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;[object Date]&quot;</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">aDate</span><span class="p">.</span><span class="nx">getTime</span><span class="p">())</span> <span class="p">){</span>
+<span class="lineno"> 7</span>             <span class="nx">attributes</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="nx">aDate</span><span class="p">;</span>
+<span class="lineno"> 8</span>         <span class="p">}</span>
+<span class="lineno"> 9</span>     <span class="p">}</span>
+<span class="lineno">10</span>     <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">set</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+<span class="lineno">11</span> <span class="p">}</span>
+</code></pre></div>
+
+
+<p>De plus, mettez à jour le defaults de sorte que l'attribut date soit désormais une date au lieu d'une chaîne.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">2</span>     <span class="nx">date</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span>
+<span class="lineno">3</span>     <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">4</span>     <span class="nx">distance</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">5</span>     <span class="nx">comments</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="lineno">6</span>     <span class="nx">minutes</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+<span class="lineno">7</span> <span class="p">},</span>
+</code></pre></div>
+
+
+<p>Bien que ce ne soit pas la manipulation de date la plus solide, cela est suffisant pour le moment. Dans une prochaine version, cela devra être améliorée.</p>
+
+<p>Ensuite, ajoutez les attributs à noutre modèle qui formatera la date comme nous le souhaitons (par exemple mm/dd/yyyy et yyyy-mm-dd).</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">dateInputType</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno">2</span>     <span class="k">return</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">formatDate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">),</span> <span class="s2">&quot;yyyy-mm-dd&quot;</span><span class="p">);</span> <span class="c1">//https://github.com/jquery/jquery-mobile/issues/2755</span>
+<span class="lineno">3</span> <span class="p">},</span>
+<span class="lineno">4</span>  
+<span class="lineno">5</span> <span class="nx">displayDate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno">6</span>     <span class="k">return</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">formatDate</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">),</span> <span class="s2">&quot;mm/dd/yyyy&quot;</span><span class="p">);</span>
+<span class="lineno">7</span> <span class="p">}</span>
+</code></pre></div>
+
+
+<p>La fonction formatDate est un simple formateur de date qui répond à nos besoins spécifiques et peut être trouvé dans le code source qui accompagne cet article (voir le lien en bas de l'article).</p>
+
+<p>Maintenant, comment pouvons-nous utiliser ces nouvelles méthodes dans notre vue. La première chose à réaliser, c'est de transmettre le template JSON. L'implémentation par défaut de la méthode toJSON d'un modèle Backbone.js ne comprendra pas ces fonctions. Par conséquent, nous devons substituer la méthode toJSON.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">toJSON</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno">2</span>     <span class="kd">var</span> <span class="nx">json</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="lineno">3</span>     <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="p">{</span><span class="nx">dateInputType</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">dateInputType</span><span class="p">(),</span> <span class="nx">displayDate</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">displayDate</span><span class="p">()});</span>
+<span class="lineno">4</span> <span class="p">}</span>
+</code></pre></div>
+
+
+<p>Ici, nous utilisons extend de Underscore.js pour ajouter nos attributs au JSON standard de Backbone. Maintenant, nous devons modifier nos templates de vue pour utiliser les attributs JSON appropriés.</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno"> 1</span> <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-list-item-template&quot;</span><span class="nt">&gt;</span>    
+<span class="lineno"> 2</span>   <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;#activity-details&quot;</span> <span class="nx">identifier</span><span class="o">=</span><span class="s2">&quot;&lt;%= id %&gt;&quot;</span><span class="o">&gt;&lt;%=</span> <span class="nx">displayDate</span> <span class="o">%&gt;</span> <span class="o">-</span> <span class="o">&lt;%=</span> <span class="nx">type</span> <span class="o">%&gt;&lt;</span><span class="err">/a&gt;&lt;/li&gt;</span>
+<span class="lineno"> 3</span> <span class="nt">&lt;/script&gt;</span>
+<span class="lineno"> 4</span> 
+<span class="lineno"> 5</span> <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-details-template&quot;</span><span class="nt">&gt;</span>
+<span class="lineno"> 6</span>     <span class="o">&lt;</span><span class="nx">h3</span><span class="o">&gt;&lt;%=</span> <span class="nx">type</span> <span class="o">%&gt;&lt;</span><span class="err">/h3&gt;</span>
+<span class="lineno"> 7</span>     <span class="o">&lt;</span><span class="nx">ul</span> <span class="nx">data</span><span class="o">-</span><span class="nx">role</span><span class="o">=</span><span class="s2">&quot;listview&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;activitiy-fields&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">inset</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">&gt;</span>
+<span class="lineno"> 8</span>       <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;</span><span class="nb">Date</span><span class="o">:</span> <span class="o">&lt;%=</span> <span class="nx">displayDate</span> <span class="o">%&gt;&lt;</span><span class="err">/li&gt;</span>
+<span class="lineno"> 9</span>       <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;</span><span class="nx">Minutes</span><span class="o">:</span> <span class="o">&lt;%=</span> <span class="nx">minutes</span> <span class="o">%&gt;&lt;</span><span class="err">/li&gt;</span>
+<span class="lineno">10</span>       <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;</span><span class="nx">Distance</span><span class="o">:</span> <span class="o">&lt;%=</span> <span class="nx">distance</span> <span class="o">%&gt;&lt;</span><span class="err">/li&gt;</span>
+<span class="lineno">11</span>       <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;</span><span class="nx">Comments</span><span class="o">:</span> <span class="o">&lt;%=</span> <span class="nx">comments</span> <span class="o">%&gt;&lt;</span><span class="err">/li&gt;</span>
+<span class="lineno">12</span>     <span class="o">&lt;</span><span class="err">/ul&gt;</span>
+<span class="lineno">13</span> <span class="nt">&lt;/script&gt;</span>
+<span class="lineno">14</span> 
+<span class="lineno">15</span> <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-form-template&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">16</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;select&quot;</span><span class="o">&gt;</span><span class="nb">Date</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno">17</span>     <span class="o">&lt;%</span> <span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;iPhone&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;iPad&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">%&gt;</span>
+<span class="lineno">18</span>         <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Date&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= dateInputType %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno">19</span>     <span class="o">&lt;%</span> <span class="p">}</span><span class="k">else</span><span class="p">{</span> <span class="o">%&gt;</span>
+<span class="lineno">20</span>         <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;date&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Date&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= displayDate %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno">21</span>     <span class="o">&lt;%</span> <span class="p">}</span> <span class="o">%&gt;</span>
+<span class="lineno">22</span>      
+<span class="lineno">23</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;type&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;select&quot;</span><span class="o">&gt;</span><span class="nx">Type</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno">24</span>     <span class="o">&lt;</span><span class="nx">select</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;type&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;type&quot;</span><span class="o">&gt;</span>
+<span class="lineno">25</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Run</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno">26</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Bike</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno">27</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Swim</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno">28</span>         <span class="o">&lt;</span><span class="nx">option</span><span class="o">&gt;</span><span class="nx">Walk</span><span class="o">&lt;</span><span class="err">/option&gt;</span>
+<span class="lineno">29</span>     <span class="o">&lt;</span><span class="err">/select&gt;</span>
+<span class="lineno">30</span>      
+<span class="lineno">31</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;distance&quot;</span><span class="o">&gt;</span><span class="nx">Distance</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno">32</span>     <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;distance&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;distance&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= distance %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno">33</span> 
+<span class="lineno">34</span>     <span class="o">&lt;</span><span class="nx">label</span> <span class="k">for</span><span class="o">=</span><span class="s2">&quot;minutes&quot;</span><span class="o">&gt;</span><span class="nx">Minutes</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+<span class="lineno">35</span>     <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;tel&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;minutes&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;minutes&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&lt;%= minutes %&gt;&quot;</span> <span class="o">/&gt;</span>
+<span class="lineno">36</span>      
+<span class="lineno">37</span>     <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">data</span><span class="o">-</span><span class="nx">role</span><span class="o">=</span><span class="s2">&quot;fieldcontain&quot;</span><span class="o">&gt;</span>
+<span class="lineno">38</span>         <span class="o">&lt;</span><span class="nx">textarea</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;comments&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;comments&quot;</span> <span class="nx">placeholder</span><span class="o">=</span><span class="s2">&quot;Comments&quot;</span><span class="o">&gt;&lt;%=</span> <span class="nx">comments</span> <span class="o">%&gt;&lt;</span><span class="err">/textarea&gt;</span>
+<span class="lineno">39</span>     <span class="o">&lt;</span><span class="err">/div&gt;</span>
+<span class="lineno">40</span> <span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+
+
+<p>Notez que les lignes 16-21 comprennent la logique conditionnelle. Il s'agit d'une très basique détection d'appareil pour déterminer le format de la date à utiliser. Il y a des plug-ins qui fournissent des solutions de rechange plus solides, mais pour garder les choses claires, cela suffira à nos besoins. Les captures d'écran ci-dessous montrent le formulaire du navigateur de bureau et des versions d'IOS avec la gestion de la date appropriée.</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot6.png" alt="Alt &quot;ScreenShot6.png&quot;" />
+<img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot7.png" alt="Alt &quot;ScreenShot7.png&quot;" />
+<img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ScreenShot8.png" alt="Alt &quot;ScreenShot8.png&quot;" /></p>
+
+<h3>Sauvegarde</h3>
+
+<p>La dernière étape consiste à implémenter la fonction de sauvegarde.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno"> 1</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#save-activity-button&#39;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno"> 2</span>     <span class="kd">var</span> <span class="nx">activityId</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activity-details&#39;</span><span class="p">).</span><span class="nx">jqmData</span><span class="p">(</span><span class="s1">&#39;activityId&#39;</span><span class="p">),</span>
+<span class="lineno"> 3</span>         <span class="nx">activity</span><span class="p">,</span>
+<span class="lineno"> 4</span>         <span class="nx">dateComponents</span><span class="p">,</span>
+<span class="lineno"> 5</span>         <span class="nx">formJSON</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activity-form-form&#39;</span><span class="p">).</span><span class="nx">formParams</span><span class="p">();</span>
+<span class="lineno"> 6</span>      
+<span class="lineno"> 7</span>     <span class="c1">//si nous sommes sur iOS et nous avons une date ... la convertir de yyyy-mm-dd vers mm/dd/yyyy</span>
+<span class="lineno"> 8</span>     <span class="c1">//A FAIRE dans une future version - pour les non-iOS, nous aurions besoin de valider que la date est bien dans le format attendu (mm/dd/yyyy)</span>
+<span class="lineno"> 9</span>     <span class="k">if</span> <span class="p">(</span><span class="nx">formJSON</span><span class="p">.</span><span class="nx">date</span> <span class="o">&amp;&amp;</span> <span class="p">((</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;iPhone&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;iPad&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))</span> <span class="p">){</span>
+<span class="lineno">10</span>         <span class="nx">dateComponents</span> <span class="o">=</span> <span class="nx">formJSON</span><span class="p">.</span><span class="nx">date</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">);</span>
+<span class="lineno">11</span>         <span class="nx">formJSON</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="nx">dateComponents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">dateComponents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">dateComponents</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="lineno">12</span>     <span class="p">}</span>
+<span class="lineno">13</span>      
+<span class="lineno">14</span>     <span class="k">if</span> <span class="p">(</span><span class="nx">activityId</span><span class="p">){</span>
+<span class="lineno">15</span>         <span class="c1">//modification</span>
+<span class="lineno">16</span>         <span class="nx">activity</span> <span class="o">=</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">activityId</span><span class="p">);</span>
+<span class="lineno">17</span>         <span class="nx">activity</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">formJSON</span><span class="p">);</span> <span class="c1">//not calling save since we have no REST backend...save in memory</span>
+<span class="lineno">18</span>     <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<span class="lineno">19</span>         <span class="c1">//nouveau (puisque nous n&#39;avons aucun backend REST, créons un nouveau modèle et ajoutons la collection pour éviter à Backbone de faire des appels REST)</span>
+<span class="lineno">20</span>         <span class="nx">activity</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activity</span><span class="p">(</span><span class="nx">formJSON</span><span class="p">);</span>
+<span class="lineno">21</span>         <span class="nx">activity</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()});</span>  <span class="c1">//create some identifier</span>
+<span class="lineno">22</span>         <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">activity</span><span class="p">);</span>
+<span class="lineno">23</span>     <span class="p">}</span>
+<span class="lineno">24</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>J'ai utilisé le plugin jQuery formParams de JavascriptMVC (trouvé <a href="http://v3.javascriptmvc.com/jquery/dist/jquery.formparams.js" rel="external" data-role="button" data-inline="true" data-mini="true">ici</a>) pour convertir mon formulaire HTML en un objet JSON. Puis, la date est convertie dans le format approprié. Une chose à noter ici est que nous n'avons aucun serveur réel avec une interface pour Backbone, nous n'appelons pas save sur le modèle ou create sur la collection. Ces méthodes entraîneraient des appels REST appropriés au serveur.</p>
+
+<p>Comme l'événement du clic sur la vue de la liste passe l'activityId à la page de détails, nous pouvons utiliser ceci pour déterminer si nous sommes en ajout ou en modification. Une chose à considérer ici est que l'utilisateur peut cliquer sur une activité existante, puis revenir à la liste, puis cliquez sur ajouter. Dans ce cas, le ActivityId de l'activité précédemment sélectionné est toujours attaché à la vue activity-details. Cela entraînera l'implémentation de notre sauvegarde alors que nous sommes en train de modifier. Pour éviter cela, nous devons supprimer le ActivityId à partir de la page activity-details lors de l'ajout d'une nouvelle activité. Ceci peut être accompli en ajoutant la ligne 7 ci-dessous pour ajouter la gestion.</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno"> 1</span> $(&#39;#add-button&#39;).live(&#39;click&#39;, function(){
+<span class="lineno"> 2</span>     var activity = new exercise.Activity(),
+<span class="lineno"> 3</span>         activityForm = $(&#39;#activity-form-form&#39;),
+<span class="lineno"> 4</span>         activityFormView;
+<span class="lineno"> 5</span>  
+<span class="lineno"> 6</span>     //effacer n&#39;importe quel attribut id existant dans la page du formulaire
+<span class="lineno"> 7</span>     $(&#39;#activity-details&#39;).jqmRemoveData(&#39;activityId&#39;);
+<span class="lineno"> 8</span>     activityFormView = new exercise.ActivityFormView({model: activity, viewContainer: activityForm});
+<span class="lineno"> 9</span>     activityFormView.render();
+<span class="lineno">10</span> });
+</code></pre></div>
+
+
+<p>La dernière étape consiste à nous assurer que nos vues sont mises à jour en conséquence lorsque l'on ajoute ou modifie des activités. Comme la vue de détails récupère l'activité avant les chargements de page, aucune modification n'est requise ici. Mais notre vue de la liste n'affiche ceci que pendant le chargement de la page initial. C'est là que nous pouvons profiter de la liaison d'événements de Backbone. Quelques ajouts à l'ActivityListView et les choses seront traitées.</p>
+
+<div class="highlight"><pre><code class="html"><span class="lineno"> 1</span> initialize: function() {
+<span class="lineno"> 2</span>     this.collection.bind(&#39;add&#39;, this.render, this);
+<span class="lineno"> 3</span>     this.collection.bind(&#39;change&#39;, this.changeItem, this);
+<span class="lineno"> 4</span>     this.collection.bind(&#39;reset&#39;, this.render, this);
+<span class="lineno"> 5</span>     this.template = _.template($(&#39;#activity-list-item-template&#39;).html());
+<span class="lineno"> 6</span> },
+<span class="lineno"> 7</span> 
+<span class="lineno"> 8</span> ...
+<span class="lineno"> 9</span> 
+<span class="lineno">10</span> changeItem: function(item){
+<span class="lineno">11</span>     this.collection.sort();
+<span class="lineno">12</span> }
+</code></pre></div>
+
+
+<p>L'événement change se propagera jusqu'au modèle et cela déclenchera l'appel de l'ensemble. Dans la méthode changeItem, nous trions la collection pour gérer les changements dans l'attribut date. L'appel de la méthode sort déclenchera l'événement reset, ce qui implique l'invocation de la méthode render, ce qui provoque le re-rendus de la liste. Cela permet de maintenir tout dans un ordre correct. L'événement add sera déclenché lorsque nous ajoutons une nouvelle activité à la collecte. Depuis que nous avons implémenter la méthode comparator sur la collection, les modèles ajoutés à la collection seront ajoutés dans l'ordre approprié.</p>
+
+<p>Nous pouvons maintenant ajouter et modifier des activités. Démarrez l'exercice :)</p>
+
+<p>Le code source pour cet article peut être trouvé <a href="https://github.com/stevenpsmith/Exercise/tree/new-and-edit" rel="external" data-role="button" data-inline="true" data-mini="true">ici</a>.</p>
+
+</div>
+
+<div class="whoring">
+  <hr>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'forresst'; // required: replace example with your forum shortname
+    var disqus_identifier = 'Comment utiliser jQuery Mobile et Backbone.js pour gérer des formulaires';
+
+    // The following are highly recommended additional parameters. Remove the slashes in front to use.
+    // var disqus_identifier = 'unique_dynamic_id_1234';
+    // var disqus_url = 'http://example.com/permalink-to-page.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<div>
+  <ul data-role="listview" data-inset="true" data-theme="d">
+  <li data-role="list-divider">Articles recents</li>
+  
+    <li><a href="/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/">22/06/2012 - Make a list jQuery Mobile sortable by drag & drop</a></li>
+  
+    <li><a href="/2012/06/22/Faire-une-liste-jQuery-Mobile-triable-par-drag-and-drop/">22/06/2012 - Faire une liste jQuery Mobile triable par drag & drop</a></li>
+  
+    <li><a href="/2012/04/04/Depuis-une-Liste-vers-une-vue-detail-en-utilisant-jQueryMobile-et-Backbone/">04/04/2012 - Depuis une liste vers une vue détail en utilisant jQueryMobile et Backbone.js</a></li>
+  
+  </ul>
+</div>
+  </div><!-- /content -->
+
+  <div data-role="footer" class="ui-bar">
+    <div data-role="controlgroup" data-type="horizontal">
+      <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>
+    </div>
+  </div><!-- /footer -->
+
+</div><!-- /page -->
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forresst - Introduction à Backbone.js avec jQuery Mobile</title>
+  <meta name="author" content="forresst" />
+  <!-- syntax highlighting CSS -->
+  <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="/js/jqm-init.js"></script>
+  <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+  <script src="/js/jquery.ui.touch-punch.min.js"></script>
+  <script>
+  $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+    $( "#sortable" ).bind( "sortstop", function(event, ui) {
+      $('#sortable').listview('refresh');
+    });
+  });
+  </script>
+</head>
+<body> 
+<div data-role="page">
+  <div data-role="header" data-position="fixed">
+    <h1>Forresst's Blog</h1>
+    <a href="#popupMenu" data-rel="popup" data-role="button" data-icon="gear" class="ui-btn-right" data-iconshadow="false">Menu</a>
+    
+    <div data-role="popup" id="popupMenu" data-theme="a">
+        <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="b">
+          <li data-role="list-divider">Menu</li>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/projet.html">Projet</a></li>
+          <li><a href="/archives.html">Archives</a></li>
+          <li><a href="/categories.html">Categories</a></li>
+          <li><a href="/about.html">A propos</a></li>
+        </ul>
+    </div>
+
+  </div><!-- /header -->
+
+  <div data-role="content"><div id="post">
+  <h2>Introduction à Backbone.js avec jQuery Mobile</h2>
+  <p><em>Ceci est une traduction d'un article du blog de CHARIOT Solutions, voici le lien vers la <a href="http://blog.chariotsolutions.com/2011/12/introduction-to-backbonejs-with-jquery.html">version originale</a></em></p>
+
+<p>Si vous travaillez sur une lourde application JavaScript (Je pense à jQuery Mobile, etc ...), vous voudriez probablement trouver dans les bibliothèques JavaScript une aide pour ajouter une structure, de la cohérence et de la commodité à vos applications. Une des bibliothèques JavaScript que j'ai utilisé dernièrement est Backbone.js. Je vous cite la documentation de Backbone : "Backbone fournit des modèles qui sont des enregistrements clé-valeur avec des événements associés et customisables, des collections avec une API contenant plusiseurs fonctions, des vues avec la gestion d'événements déclaratifs, et se connecte à toute votre application existante via une interface RESTful JSON". C'est vraiment un excellent résumé de ce que Backbone peut fournir à votre application.</p>
+
+<p>Pour l'exemple, afin d'utiliser Backbone, je vais créer une petite application jQuery Mobile et utiliser un modèle Backbone, une collection et la vue pour rendre l'interface utilisateur. Grâce à l'utilisation du modèle d'événement de Backbone, l'interface utilisateur sera mise à jour quand le modèle change ou lorsque de nouveaux modèles sont créés.</p>
+
+<p>J'ai décidé d'utiliser jQuery Mobile comme framework UI, principalement parce que je suis un gars mobile et il fournira le code HTML avec du style raisonnable sans effort supplémentaire de ma part. Je sais, je suis paresseux ... mais ça fonctionne pour ce blog :). En continuant sur le chemin de la paresse, lorsque je parlerais de jQuery Mobile, j'utiliserais l'abbréviation JQM à partir de maintenant.</p>
+
+<p>Ce qui suit suppose que vous êtes au moins un peu familier avec jQuery et JQM.  Si ce n'est pas, jetez un oeil sur le site Web JQM <a href="http://jquerymobile.com/">http://jquerymobile.com/</a> (et <a href="http://mobile.jquery-fr.com/">http://mobile.jquery-fr.com/</a> pour la version française). Ils ont beaucoup de documentation et même un modèle pour créer une application de base.  Tout le code dans ce post sera disponible dans mon dépôt github (<a href="https://github.com/stevenpsmith/Exercise/tree/BackboneIntro">https://github.com/stevenpsmith/Exercise/tree/BackboneIntro</a>).</p>
+
+<p>L'application que nous allons faire va permettre à un utilisateur de noter les exercices qu'il a fait un jour donné. N'oubliez pas que c'est une application très basique dont le seul but est de faire une présentation de Backbone.js. La partie qui sera développée pour cet article implique d'extraire des données d'exercice d'un serveur et de présenter cela dans une liste, un modèle très commun pour des applications mobile. En fin de compte, notre application va ressembler à ceci :</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/ListView.png" alt="Alt &quot;ListView.png&quot;" /></p>
+
+<p>Le JSON que nous allons traiter, ressemblera à ceci :</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno"> 1</span> <span class="p">[</span>
+<span class="lineno"> 2</span>     <span class="p">{</span>
+<span class="lineno"> 3</span>         <span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span>
+<span class="lineno"> 4</span>         <span class="s2">&quot;date&quot;</span><span class="o">:</span> <span class="s2">&quot;12/12/2011&quot;</span><span class="p">,</span>
+<span class="lineno"> 5</span>         <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;Run&quot;</span><span class="p">,</span>
+<span class="lineno"> 6</span>         <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="s2">&quot;3 miles&quot;</span><span class="p">,</span>
+<span class="lineno"> 7</span>         <span class="s2">&quot;comments&quot;</span><span class="o">:</span> <span class="s2">&quot;This was really hard&quot;</span><span class="p">,</span>
+<span class="lineno"> 8</span>         <span class="s2">&quot;minutes&quot;</span><span class="o">:</span> <span class="mi">36</span>
+<span class="lineno"> 9</span>     <span class="p">},</span>
+<span class="lineno">10</span>     <span class="p">{</span>
+<span class="lineno">11</span>         <span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span>
+<span class="lineno">12</span>         <span class="s2">&quot;date&quot;</span><span class="o">:</span> <span class="s2">&quot;12/11/2011&quot;</span><span class="p">,</span>
+<span class="lineno">13</span>         <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;Bike&quot;</span><span class="p">,</span>
+<span class="lineno">14</span>         <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="s2">&quot;6 miles&quot;</span><span class="p">,</span>
+<span class="lineno">15</span>         <span class="s2">&quot;comments&quot;</span><span class="o">:</span> <span class="s2">&quot;All down hill...felt like nothing&quot;</span><span class="p">,</span>
+<span class="lineno">16</span>         <span class="s2">&quot;minutes&quot;</span><span class="o">:</span> <span class="mi">30</span>
+<span class="lineno">17</span>     <span class="p">},</span>
+<span class="lineno">18</span>     <span class="p">{</span>
+<span class="lineno">19</span>         <span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="mi">3</span><span class="p">,</span>
+<span class="lineno">20</span>         <span class="s2">&quot;date&quot;</span><span class="o">:</span> <span class="s2">&quot;12/10/2011&quot;</span><span class="p">,</span>
+<span class="lineno">21</span>         <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;Walk&quot;</span><span class="p">,</span>
+<span class="lineno">22</span>         <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="s2">&quot;2.5 miles&quot;</span><span class="p">,</span>
+<span class="lineno">23</span>         <span class="s2">&quot;comments&quot;</span><span class="o">:</span> <span class="s2">&quot;Shouldn&#39;t have taken the dog&quot;</span><span class="p">,</span>
+<span class="lineno">24</span>         <span class="s2">&quot;minutes&quot;</span><span class="o">:</span> <span class="mi">45</span>
+<span class="lineno">25</span>     <span class="p">},</span>
+<span class="lineno">26</span>     <span class="p">{</span>
+<span class="lineno">27</span>         <span class="s2">&quot;id&quot;</span><span class="o">:</span><span class="mi">4</span><span class="p">,</span>
+<span class="lineno">28</span>         <span class="s2">&quot;date&quot;</span><span class="o">:</span> <span class="s2">&quot;12/09/2011&quot;</span><span class="p">,</span>
+<span class="lineno">29</span>         <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;Run&quot;</span><span class="p">,</span>
+<span class="lineno">30</span>         <span class="s2">&quot;distance&quot;</span><span class="o">:</span> <span class="s2">&quot;Long&quot;</span><span class="p">,</span>
+<span class="lineno">31</span>         <span class="s2">&quot;comments&quot;</span><span class="o">:</span> <span class="s2">&quot;Legs felt good&quot;</span><span class="p">,</span>
+<span class="lineno">32</span>         <span class="s2">&quot;minutes&quot;</span><span class="o">:</span> <span class="mi">75</span>
+<span class="lineno">33</span>     <span class="p">}</span>
+<span class="lineno">34</span> <span class="p">]</span>
+</code></pre></div>
+
+
+<p>J'aime organiser ma structure de l'application un peu différemment que JQM le montre pour sa mise en place, principalement pour des raisons organisationnelles. Mon structure de l'application ressemble à ceci :</p>
+
+<p><img src="/images/2012-03-01-Backbone-et-jQuery-Mobile/dir_structure.png" alt="Alt &quot;dir_structure.png&quot;" /></p>
+
+<p>Tout notre travail se fera dans index.html et app.js. Dans les applications réelles, j'ai l'habitude de découper mes fichiers JS plus finement, mais cela n'est vraiment pas nécessaire ici. La page liste de l'application est définie dans index.html. Cela devrait ressembler à une définition de page JQM typique avec seulement la partie du contenu de définie. Nous utiliserons la vue de Backbone pour créer la liste :</p>
+
+<div class="highlight"><pre><code class="rhtml"><span class="lineno">1</span> <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;page&quot;</span> <span class="na">id=</span><span class="s">&quot;activities&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">2</span>     <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">3</span>         <span class="nt">&lt;h1&gt;</span>Activities<span class="nt">&lt;/h1&gt;</span>
+<span class="lineno">4</span>         <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;#&quot;</span> <span class="na">data-role=</span><span class="s">&quot;button&quot;</span> <span class="na">data-icon=</span><span class="s">&quot;add&quot;</span> <span class="na">id=</span><span class="s">&quot;add-button&quot;</span><span class="nt">&gt;</span>Add<span class="nt">&lt;/a&gt;</span>
+<span class="lineno">5</span>     <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">6</span>     <span class="nt">&lt;div</span> <span class="na">data-role=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+<span class="lineno">7</span>         <span class="c">&lt;!-- Le contenu de la liste sera rendu via la vue de backbone --&gt;</span>
+<span class="lineno">8</span>     <span class="nt">&lt;/div&gt;</span>
+<span class="lineno">9</span> <span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+
+
+<p>Si nous regardons cela dans le navigateur, on obtient une page vide avec un bouton Ajouter dans l'entête. Puisque nous voulons remplir notre liste avec des données, nous devons définir dans l'ordre un modèle Backbone et une collection pour manipuler et stocker les données via JavaScript. Un modèle de base et sa collection sont faciles à définir :</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activity</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<span class="lineno">2</span> <span class="p">});</span>
+<span class="lineno">3</span> 
+<span class="lineno">4</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activities</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<span class="lineno">5</span>     <span class="nx">model</span><span class="o">:</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activity</span><span class="p">,</span>
+<span class="lineno">6</span>     <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;exercise.json&quot;</span>
+<span class="lineno">7</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>Le grand avantage au sujet de la collection, c'est qu'elle fournit un accès RESTful à votre serveur pour la récupération et la persistance de données. Pour conserver cette simplicité, nos données seront servis à partir d'un fichier statique JSON avec la structure mentionné plus tôt. Puisque nous n'avons pas de serveur réel dans cet exemple, nous ne pouvons pas vraiment sauver nos changements n'importe où, mais dans la mémoire du client. Mais la collection ira chercher les données à partir du serveur et cela peut être utilisé pour nous aider à faire le rendu notre interface utilisateur. Le code suivant va créer une instance de la collection en mémoire, récupérer les données depuis le serveur et le parser en une collection de modèles.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">initData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno">2</span>     <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">Activities</span><span class="p">();</span>
+<span class="lineno">3</span>     <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">async</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>  <span class="c1">// use async false to have the app wait for data before rendering the list</span>
+<span class="lineno">4</span> <span class="p">};</span>
+</code></pre></div>
+
+
+<p>La fonction exercise.initData() peut être appelé lors de l'initialisation de l'application (ou n'importe où ailleurs serait approprié) pour charger les données. Maintenant il est temps de rendre la vue. Les vues Backbone dépendent d'Underscore.js. Underscore est une bibliothèque d'utilitaire qui comprend un grand nombre de fonctionnalités intéressantes, dont l'une est les templates de vue. Backbone peut être utilisé avec de nombreux frameworks de template de vue (par exemple Mustache, Handlbars, etc...), mais ici nous nous limiterons avec les templates de Underscore car ils répondent à nos besoins. Pour nos éléments d'activité d'exercice, nous avons besoin d'un modèle très basique comme celui-ci :</p>
+
+<div class="highlight"><pre><code class="rhtml"><span class="lineno">1</span> <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/template&quot;</span> <span class="na">id=</span><span class="s">&quot;activity-list-item-template&quot;</span><span class="nt">&gt;</span>    
+<span class="lineno">2</span>     <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;#activity-details&quot;</span> <span class="nx">identifier</span><span class="o">=</span><span class="s2">&quot;</span><span class="cp">&lt;%=</span> <span class="nb">id</span> <span class="cp">%&gt;</span><span class="s2">&quot;</span><span class="o">&gt;</span><span class="cp">&lt;%=</span> <span class="n">date</span> <span class="cp">%&gt;</span> <span class="o">-</span> <span class="cp">&lt;%=</span> <span class="n">type</span> <span class="cp">%&gt;</span><span class="o">&lt;</span><span class="err">/a&gt;&lt;/li&gt;</span>
+<span class="lineno">3</span> <span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+
+
+<p>En donnant au template un id unique, cela permettra d'y accéder en utilisant les sélecteurs habituels de jQuery. Les éléments axés sur les données sur le modèle sont entourés par <blockquote> &lt;%= id %&gt; </blockquote>  Comme vous pouvez le voir dans la ligne 2, nous utilisons les attributs id, date et type du modèle fourni dans le template pour remplir le code HTML en conséquence. Bien que l'attribut "identifier" n'est pas un véritable attribut HTML et qu'il n'appartient à aucun framework, il sera utilisé pour déterminer l'activité sélectionné par l'utilisateur dans la liste afin que les données appropriées puissent être récupérées et affichées sur une page suivante.</p>
+
+<p>L'étape suivante consiste à définir la vue de Backbone qui rendra la liste. Les vues Backbone peuvent être définies et mises en place de nombreuses façons, et la documentation fait un excellent travail en expliquant les options, etc. Je tiens à définir mes vues de sorte qu'elles soient aussi autonomes que possible. Donc, plutôt que de laisser Backbone créer le code HTML au sein d'un DIV (le comportement par défaut), je définis les propriétés appropriées pour créer une liste JQM comme indiquée dans les lignes 2-4 ci-dessous :</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno"> 1</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">ActivityListView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<span class="lineno"> 2</span>     <span class="nx">tagName</span><span class="o">:</span> <span class="s1">&#39;ul&#39;</span><span class="p">,</span>
+<span class="lineno"> 3</span>     <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;activities-list&#39;</span><span class="p">,</span>
+<span class="lineno"> 4</span>         <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;data-role&quot;</span><span class="o">:</span> <span class="s1">&#39;listview&#39;</span><span class="p">},</span>
+<span class="lineno"> 5</span> 
+<span class="lineno"> 6</span>     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno"> 7</span>         <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activity-list-item-template&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">());</span>
+<span class="lineno"> 8</span>     <span class="p">},</span>
+<span class="lineno"> 9</span> 
+<span class="lineno">10</span>     <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="lineno">11</span>         <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewContainer</span><span class="p">,</span>
+<span class="lineno">12</span>             <span class="nx">activities</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span>
+<span class="lineno">13</span>             <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">,</span>
+<span class="lineno">14</span>             <span class="nx">listView</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+<span class="lineno">15</span> 
+<span class="lineno">16</span>         <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">empty</span><span class="p">();</span>
+<span class="lineno">17</span>         <span class="nx">activities</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">activity</span><span class="p">){</span>
+<span class="lineno">18</span>             <span class="nx">listView</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">template</span><span class="p">(</span><span class="nx">activity</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()));</span>
+<span class="lineno">19</span>         <span class="p">});</span>
+<span class="lineno">20</span>         <span class="nx">container</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">));</span>
+<span class="lineno">21</span>         <span class="nx">container</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;create&#39;</span><span class="p">);</span>
+<span class="lineno">22</span>         <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+<span class="lineno">23</span>     <span class="p">}</span>
+<span class="lineno">24</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>A partir du site Backbone: «L'implémentation par défaut du <em>render</em> n'est pas opérationnel. Surchargez cette fonction avec votre code pour rendre le template de la vue à partir des données du modèle, et mettez à jour <em>this.el</em> avec le nouveau HTML. Une bonne convention est de retourner <em>this</em> à la fin du <em>render</em> pour permettre des appels enchaînés". Le <em>$(this.el)</em> se réfère à l'élément conteneur, dans ce cas l'élément <em>ul</em>. Il y a des attributs standards qui sont accessibles à partir de la vue, y compris la collection et le modèle Backbone. Les lignes 17-20 itérent sur la collection <em>activities</em>, remplissent les espaces réservés du template avec les données du modèle, et ajoutent le code HTML résultant dans l'élément conteneur.</p>
+
+<p>Si vous avez besoin de passer des données arbitraires à votre vue, on peut y accéder via l'objet <em>options</em> comme indiqué sur la ligne 11 du code. Comme mentionné plus haut, j'aime que mes vues Backbone soient aussi autonomes que possible, donc je fournis à l'élément contenant l'HTML pour cette vue (comme un objet jQuery) lors de la construction de l'instance View. La ligne 20 définit le HTML de l'élément contenant à la vue de Backbone et la ligne 21 dit à JQM de styliser les choses appropriées.</p>
+
+<p>La prochaine étape consiste à instancier et rendre la vue avec la collection appropriée et le conteneur HTML. Puisque c'est la page "Home" dans notre application, cela se fait après que JQM initialise la page.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activities&#39;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">&#39;pageinit&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+<span class="lineno">2</span>     <span class="kd">var</span> <span class="nx">activitiesListContainer</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activities&#39;</span><span class="p">).</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;:jqmData(role=&#39;content&#39;)&quot;</span><span class="p">),</span>
+<span class="lineno">3</span>         <span class="nx">activitiesListView</span><span class="p">;</span>
+<span class="lineno">4</span>     <span class="nx">exercise</span><span class="p">.</span><span class="nx">initData</span><span class="p">();</span>
+<span class="lineno">5</span>     <span class="nx">activitiesListView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">ActivityListView</span><span class="p">({</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span><span class="p">,</span> <span class="nx">viewContainer</span><span class="o">:</span> <span class="nx">activitiesListContainer</span><span class="p">});</span>
+<span class="lineno">6</span>     <span class="nx">activitiesListView</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+<span class="lineno">7</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>Maintenant, nous avons un affichage de liste qui rend une liste JQM basée sur les données dans une collection Backbone. Pour profiter de la puissance réelle des modèles/collections de Backbone, nous pouvons ajouter des écouteurs lors de changement dans la collection qui mettront à jour la vue en fonction de ces changements. La beauté de ceci est que le code supplémentaire pour accomplir cela est minime. En ajoutant</p>
+
+<pre><code>this.collection.bind('add', this.add, this);
+</code></pre>
+
+<p>à la méthode <em>initialize</em> de votre Vue Backbone et en fournissant une méthode add().</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">add</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">2</span>    <span class="kd">var</span> <span class="nx">activitiesList</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#activities-list&#39;</span><span class="p">),</span>
+<span class="lineno">3</span>        <span class="nx">template</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">;</span>
+<span class="lineno">4</span> 
+<span class="lineno">5</span>    <span class="nx">activitiesList</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">template</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()));</span>
+<span class="lineno">6</span>    <span class="nx">activitiesList</span><span class="p">.</span><span class="nx">listview</span><span class="p">(</span><span class="s1">&#39;refresh&#39;</span><span class="p">);</span>
+<span class="lineno">7</span> <span class="p">}</span>
+</code></pre></div>
+
+
+<p>Ici, nous récupérons tout simplement la liste en ajoutant le nouveau modèle à la vue (et en rafraîchissant, c'est JQM qui fait sa magie). En ajoutant un gestionnaire de clic au bouton "Add", nous pouvons tester que l'ajout d'un modèle à la collection met à jour la vue.</p>
+
+<div class="highlight"><pre><code class="js"><span class="lineno">1</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#add-button&#39;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="lineno">2</span>     <span class="nx">exercise</span><span class="p">.</span><span class="nx">activities</span><span class="p">.</span><span class="nx">add</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="mi">6</span><span class="p">,</span> <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;12/15/2011&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;Walk&#39;</span><span class="p">,</span> <span class="nx">distance</span><span class="o">:</span> <span class="s1">&#39;2 miles&#39;</span><span class="p">,</span> <span class="nx">comments</span><span class="o">:</span> <span class="s1">&#39;Wow...that was easy.&#39;</span><span class="p">});</span>
+<span class="lineno">3</span> <span class="p">});</span>
+</code></pre></div>
+
+
+<p>Il existe d'autres méthodes pour lier, mais cela fournit un exemple rapide sur la façon dont Backbone peut être utilisé pour assister le rendu de la vue et du traitement des données dans les applications client basées sur JavaScript.</p>
+
+<p>La base du code complet est disponible <a href="https://github.com/stevenpsmith/Exercise/tree/BackboneIntro">ici</a>. Il peut être déployé sur n'importe quel serveur web. Pour OS X, j'utilise le serveur Web intégré, mais n'hésitez pas à utiliser le serveur de votre choix.</p>
+
+</div>
+
+<div class="whoring">
+  <hr>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'forresst'; // required: replace example with your forum shortname
+    var disqus_identifier = 'Introduction à Backbone.js avec jQuery Mobile';
+
+    // The following are highly recommended additional parameters. Remove the slashes in front to use.
+    // var disqus_identifier = 'unique_dynamic_id_1234';
+    // var disqus_url = 'http://example.com/permalink-to-page.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<div>
+  <ul data-role="listview" data-inset="true" data-theme="d">
+  <li data-role="list-divider">Articles recents</li>
+  
+    <li><a href="/2012/07/16/Comment-utiliser-jQueryMobile-et-Backbone-pour-gerer-des-formulaires/">16/07/2012 - Comment utiliser jQuery Mobile et Backbone.js pour gérer des formulaires</a></li>
+  
+    <li><a href="/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/">22/06/2012 - Make a list jQuery Mobile sortable by drag & drop</a></li>
+  
+    <li><a href="/2012/06/22/Faire-une-liste-jQuery-Mobile-triable-par-drag-and-drop/">22/06/2012 - Faire une liste jQuery Mobile triable par drag & drop</a></li>
+  
+  </ul>
+</div>
+  </div><!-- /content -->
+
+  <div data-role="footer" class="ui-bar">
+    <div data-role="controlgroup" data-type="horizontal">
+      <a href="https://github.com/forresst/forresst.github.com" data-role="button">Fork Me</a>
+    </div>
+  </div><!-- /footer -->
+
+</div><!-- /page -->
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <title>Exemple de liste triable par glisser/déposer</title> 
+  <meta name="author" content="forresst" />
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
+  <script src="jquery.ui.touch-punch.min.js"></script>
+  <script>
+  var _gaq = _gaq || [];
+  $(document).ready(function(e) {
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + 
+                  '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    }); 
+
+  $('[data-role=page]').live('pageshow', function (event, ui) {
+    try {
+      _gaq.push(['_setAccount', 'UA-28940436-2']);
+      if ($.mobile.activePage.attr("data-url")) {
+        _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
+      } else {
+        _gaq.push(['_trackPageview']);
+      }
+    } catch(err) {}
+  });
+  
+  $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+    $( "#sortable" ).bind( "sortstop", function(event, ui) {
+      $('#sortable').listview('refresh');
+    });
+  });
+  </script>  
+</head>
+<body> 
+<div>
+  <div data-role="header" data-theme="d">
+    <h1>Exemple</h1>
+  </div>
+
+  <div data-role="content" data-theme="c">
+  
+  <h2>Démo</h2>
+    <ul data-role="listview" data-inset="true" data-theme="d" id="sortable">
+      <li data-role="list-divider">Liste</li>
+      <li>Elément 1</li>
+      <li>Elément 2</li>
+      <li>Elément 3</li>
+      <li>Elément 4</li>
+      <li>Elément 5</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
