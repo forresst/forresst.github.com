@@ -1,0 +1,7 @@
+paginate: 5
+url: "http://forresst.github.com/"
+markdown: rdiscount
+permalink: /:year/:month/:day/:title/
+safe: true
+lsi: false
+pygments: true
