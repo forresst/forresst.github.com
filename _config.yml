@@ -1,4 +1,4 @@
-paginate: 5
+paginate: 50
 url: "http://forresst.github.com/"
 markdown: rdiscount
 pygments: true
