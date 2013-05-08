@@ -6,7 +6,6 @@ categories:
 - jQuery Mobile
 - Jekyll
 - Github
-lastmod: 2012-03-30 12:40:00 +0100
 ---
 
 Il y a quelques semaines, j'ai découvert grâce au blog de [k33g](http://k33g.github.com/), comment faire un blog très geek hébergé sous [Github](http://k33g.github.com/2011/07/26/JEKILL-ON-GITHUB.html) grâce à [Jekyll](https://github.com/mojombo/jekyll). Pour faire une explication rapide, en fait github possède en standard Jekyll sur le site, et vous pouvez donc créer un blog avec des pages statiques qui seront hébergées sous Github. Jekyll est en fait une sorte de moteur de template, il est donc possible de formatter ses pages comme bon vous semble.
