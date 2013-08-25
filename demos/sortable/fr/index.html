@@ -20,16 +20,16 @@
                   '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-    }); 
+  }); 
 
-  $('[data-role=page]').on('pageshow', function (event, ui) {
+  $(document).on("pageshow", function(event, ui) {
     try {
-      _gaq.push(['_setAccount', 'UA-28940436-2']);
+      _gaq.push(['_setAccount', 'UA-28940436-2']);    
       if ($.mobile.activePage.attr("data-url")) {
-        _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
-      } else {
-        _gaq.push(['_trackPageview']);
-      }
+            _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
+        } else {
+            _gaq.push(['_trackPageview']);
+        }
     } catch(err) {}
   });
   
