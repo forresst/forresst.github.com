@@ -157,7 +157,7 @@ La prochaine étape consiste à instancier et rendre la vue avec la collection a
 
 {% highlight js linenos %}
 
-$('#activities').live('pageinit', function(event){
+$('#activities').on('pageinit', function(event){
     var activitiesListContainer = $('#activities').find(":jqmData(role='content')"),
         activitiesListView;
     exercise.initData();
@@ -189,7 +189,7 @@ Ici, nous récupérons tout simplement la liste en ajoutant le nouveau modèle �
 
 {% highlight js linenos %}
 
-$('#add-button').live('click', function(){
+$('#add-button').on('click', function(){
     exercise.activities.add({id: 6, date: '12/15/2011', type: 'Walk', distance: '2 miles', comments: 'Wow...that was easy.'});
 });
 

@@ -8,7 +8,7 @@
     })();
     }); 
 
-  $('[data-role=page]').live('pageshow', function (event, ui) {
+  $('[data-role=page]').on('pageshow', function (event, ui) {
     try {
       _gaq.push(['_setAccount', 'UA-28940436-2']);
       if ($.mobile.activePage.attr("data-url")) {

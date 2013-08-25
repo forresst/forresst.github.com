@@ -99,7 +99,7 @@ Pour faire la transition vers la page du formulaire, l'attribut *href* sur ​�
 
 {% highlight js linenos %}
 
-$('#add-button').live('click', function(){
+$('#add-button').on('click', function(){
     var activity = new exercise.Activity(),
         activityForm = $('#activity-form-form'),
         activityFormView;
@@ -157,7 +157,7 @@ Comme nous l'avons fait avec le bouton d'ajout, qui référencait la page formul
 
 {% highlight js linenos %}
 
-$('#edit-activity-button').live('click', function() {
+$('#edit-activity-button').on('click', function() {
     var activityId = $('#activity-details').jqmData('activityId'),
         activityModel = exercise.activities.get(activityId),
         activityForm = $('#activity-form-form'),
@@ -309,7 +309,7 @@ La dernière étape consiste à implémenter la fonction de sauvegarde.
 
 {% highlight js linenos %}
 
-$('#save-activity-button').live('click', function(){
+$('#save-activity-button').on('click', function(){
     var activityId = $('#activity-details').jqmData('activityId'),
         activity,
         dateComponents,
@@ -342,7 +342,7 @@ Comme l'événement du clic sur la vue de la liste passe l'activityId à la page
 
 {% highlight html linenos %}
 
-$('#add-button').live('click', function(){
+$('#add-button').on('click', function(){
     var activity = new exercise.Activity(),
         activityForm = $('#activity-form-form'),
         activityFormView;

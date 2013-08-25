@@ -131,7 +131,7 @@ Maintenant nous avons besoin de lier tout cela ensemble. Le pattern typique que 
 
 {% highlight js linenos %}
 
-$('#activity-details').live('pagebeforeshow', function(){
+$('#activity-details').on('pagebeforeshow', function(){
     var activitiesDetailsContainer = $('#activity-details').find(":jqmData(role='content')"),
         activityDetailsView,
         activityId = $('#activity-details').jqmData('activityId'),

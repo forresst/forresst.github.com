@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <title>Example sortable list</title> 
   <meta name="author" content="forresst" />
-  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-  <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-  <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>
-  <script src="jquery.ui.touch-punch.min.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.css" />
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.0-alpha.2/jquery.mobile-1.4.0-alpha.2.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+  <script src="/js/jquery.ui.touch-punch.min.js"></script>
   <script>
   var _gaq = _gaq || [];
   $(document).ready(function(e) {
@@ -22,7 +22,7 @@
     })();
     }); 
 
-  $('[data-role=page]').live('pageshow', function (event, ui) {
+  $('[data-role=page]').on('pageshow', function (event, ui) {
     try {
       _gaq.push(['_setAccount', 'UA-28940436-2']);
       if ($.mobile.activePage.attr("data-url")) {
@@ -34,6 +34,9 @@
   });
   
   $(document).bind('pageinit', function() {
+    $( "#sortable" ).sortable({
+       items: "li:not(.ui-li-divider)"
+    });
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
     $( "#sortable" ).bind( "sortstop", function(event, ui) {
