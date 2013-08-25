@@ -11,6 +11,7 @@
   $(document).on("pageshow" ".ui-page", function(event, ui) {
     var $page = $(this);
     var url = $page.data("url");
+    console.log(url);
     try {
       _gaq.push(['_setAccount', 'UA-28940436-2']);    
       if (url.length)) {
