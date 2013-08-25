@@ -8,14 +8,15 @@
     })();
     }); 
 
-  $('[data-role=page]').on('pageshow', function (event, ui) {
+  $(document).on("pageshow" ".ui-page", function(event, ui) {
+    var $page = $(this);
+    var url = $page.data("url");
     try {
-      _gaq.push(['_setAccount', 'UA-28940436-2']);
-      if ($.mobile.activePage.attr("data-url")) {
-        _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
+      _gaq.push(['_setAccount', 'UA-28940436-2']);    
+      if (url.length)) {
+       _gaq.push(['_trackPageview', url)]);
       } else {
-        _gaq.push(['_trackPageview']);
+       _gaq.push(['_trackPageview']);
       }
     } catch(err) {}
   });
-  
