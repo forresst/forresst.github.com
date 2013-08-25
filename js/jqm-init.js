@@ -6,7 +6,7 @@
                   '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-    }); 
+  }); 
 
   $(document).on("pageshow" ".ui-page", function(event, ui) {
     var $page = $(this);
@@ -14,8 +14,8 @@
     console.log(url);
     try {
       _gaq.push(['_setAccount', 'UA-28940436-2']);    
-      if (url.length)) {
-       _gaq.push(['_trackPageview', url)]);
+      if (url.length) {
+       _gaq.push(['_trackPageview', url]);
       } else {
        _gaq.push(['_trackPageview']);
       }
