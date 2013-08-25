@@ -11,7 +11,6 @@
   $(document).on("pageshow", function(event, ui) {
     try {
       _gaq.push(['_setAccount', 'UA-28940436-2']);    
-      console.log($.mobile.activePage.attr("data-url"));
       if ($.mobile.activePage.attr("data-url")) {
             _gaq.push(['_trackPageview', $.mobile.activePage.attr("data-url")]);
         } else {
