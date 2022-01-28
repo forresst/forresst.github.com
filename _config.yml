@@ -1,5 +1,5 @@
 paginate: 5
-url: "http://forresst.github.com/"
+url: "https://forresst.github.io/"
 markdown: rdiscount
 permalink: /:year/:month/:day/:title/
 safe: true
